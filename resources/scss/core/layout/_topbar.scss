@@ -1,0 +1,126 @@
+@use "../variables" as v;
+
+/* ========== Topbar ========== */
+:root {
+    --topbar-h: 56px;
+    --topbar-pad-x: 0.75rem; /* 12px */
+    --topbar-bg: #f6893d; /* ganti ke v.$brand kalau ada */
+    --topbar-ink: #fff;
+}
+
+.topbar-custom {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--topbar-h);
+    background: #f6893d;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1rem;
+    transition: margin-left 0.25s ease, width 0.25s ease;
+    z-index: 50;
+
+    /* konten dalam topbar */
+    .left,
+    .center,
+    .right {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        min-width: 0; /* biar teks nggak meluber */
+    }
+
+    /* brand / judul */
+    .brand {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: 600;
+        font-size: 1.05rem;
+        color: inherit;
+        text-decoration: none;
+        white-space: nowrap;
+    }
+
+    /* tombol/ikon */
+    .btn,
+    .icon-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: 40px;
+        min-width: 40px;
+        padding: 0.35rem;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        background: rgba(255, 255, 255, 0.12);
+        color: inherit;
+        text-decoration: none;
+        cursor: pointer;
+        transition: background 0.2s ease, transform 0.2s ease;
+    }
+    .btn:hover,
+    .icon-btn:hover {
+        background: rgba(255, 255, 255, 0.18);
+    }
+    .btn:active,
+    .icon-btn:active {
+        transform: translateY(1px);
+    }
+    .btn:focus-visible,
+    .icon-btn:focus-visible {
+        outline: 2px solid rgba(255, 255, 255, 0.8);
+        outline-offset: 2px;
+    }
+
+    /* dropdown */
+    .dropdown {
+        position: relative;
+    }
+    .dropdown-menu {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        min-width: 180px;
+        margin-top: 0.5rem;
+        background: #fff;
+        color: #1f2937;
+        border-radius: 0.5rem;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        padding: 0.5rem 0;
+        z-index: 60;
+    }
+    .dropdown-menu a,
+    .dropdown-menu button {
+        display: block;
+        width: 100%;
+        padding: 0.5rem 1rem;
+        text-align: left;
+        background: transparent;
+        border: 0;
+        color: inherit;
+        text-decoration: none;
+    }
+    .dropdown-menu a:hover,
+    .dropdown-menu button:hover {
+        background: #f3f4f6;
+    }
+}
+
+/* ====== Sidebar-aware: saat sidebar aktif di desktop, topbar ikut geser ====== */
+@media (min-width: 768px) {
+    body.with-sidebar .topbar-custom {
+        padding-left: calc(var(--topbar-pad-x) + var(--sb-w, 18rem));
+    }
+}
+
+/* ====== Prefer reduced motion ====== */
+@media (prefers-reduced-motion: reduce) {
+    .topbar-custom .btn,
+    .topbar-custom .icon-btn {
+        transition: none;
+    }
+}

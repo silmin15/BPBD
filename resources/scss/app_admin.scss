@@ -1,0 +1,27 @@
+/* ===== shared core (dipakai semua role) ===== */
+@use "core/variables" as v;
+@use "core/reset";
+@use "core/utilities";
+
+/* (opsional) bootstrap, masih pakai token dari core */
+@use "bootstrap/scss/bootstrap" with (
+    $primary: v.$brand-primary-600
+);
+@use "role/admin/manajemen-user/index";
+
+/* ===== layout umum (header/sidebar/content/footer) ===== */
+@use "core/layout/topbar";
+@use "core/layout/sidebar";
+@use "core/layout/footer";
+@use "core/layout/content";
+
+/* ===== komponen generik ===== */
+@use "core/components/overlay";
+@use "core/components/alert";
+@use "core/components/card";
+@use "core/components/dropdown";
+@use "core/components/form";
+@use "core/components/modal";
+@use "core/components/table";
+@use "core/components/button";
+@use "core/components/searchbar";

@@ -12,7 +12,7 @@ use App\Http\Controllers\Api\AuthController; // <-- Kita akan buat controller in
 */
 
 // Endpoint publik untuk login via AJAX/modal
-Route::post('/login', [AuthController::class, 'login']);
+// Route::post('/login', [AuthController::class, 'login']);
 
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

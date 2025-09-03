@@ -1,0 +1,68 @@
+@use "../variables" as v;
+
+.searchbar {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 0.4rem;
+
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: v.$radius;
+    box-shadow: v.$shadow-soft;
+    padding: 0.35rem 0.5rem;
+    transform: scale(0.75);
+    transform-origin: right center;
+    &:focus-within {
+        border-color: rgba(36, 53, 116, 0.35); /* selaras nuansa footer */
+        box-shadow: 0 0 0 3px rgba(36, 53, 116, 0.12);
+    }
+}
+
+.searchbar__input {
+    border: 0;
+    outline: 0;
+    height: 42px;
+    font-size: v.$fs-md;
+    color: #0f172a;
+    background: transparent;
+
+    &::placeholder {
+        color: #94a3b8;
+    }
+}
+
+.searchbar__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border: 0;
+    border-radius: 10px;
+    cursor: pointer;
+    background: #f1f5f9;
+    transition: transform 0.12s ease, filter 0.12s ease;
+
+    &:hover {
+        filter: brightness(0.97);
+    }
+    &:active {
+        transform: translateY(1px);
+    }
+}
+
+.searchbar__btn--ghost {
+    background: transparent;
+    width: 38px;
+    height: 38px;
+}
+
+@media (max-width: 576px) {
+    .searchbar {
+        padding: 0.4rem 0.5rem;
+    }
+    .searchbar__input {
+        font-size: v.$fs-sm;
+    }
+}

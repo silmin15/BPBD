@@ -1,0 +1,86 @@
+@use "../variables" as v;
+:root {
+    --sb-w: 18rem; /* lebar sidebar */
+    --topbar-h: 56px;
+}
+
+#main-sidebar {
+    position: fixed;
+    top: 0; /* <— mulai dari paling atas */
+    left: 0;
+    bottom: 0;
+    width: var(--sb-w);
+    height: 100vh; /* penuh layar */
+    background: #0f172a;
+    color: #cbd5e1;
+    border-right: 1px solid #e5e7eb;
+    overflow-y: auto;
+    transition: transform 0.25s ease;
+    z-index: 60; /* lebih tinggi dari topbar */
+}
+
+/* default: off-canvas */
+body:not(.with-sidebar) #main-sidebar {
+    transform: translateX(-100%);
+}
+
+/* aktif: tampil */
+body.with-sidebar #main-sidebar {
+    transform: translateX(0);
+}
+
+/* daftar & link */
+#main-sidebar .sidebar-nav {
+    list-style: none;
+    margin: 0;
+    padding: 0.75rem;
+}
+#main-sidebar .sidebar-item + .sidebar-item {
+    margin-top: 0.25rem;
+}
+#main-sidebar .sidebar-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.55rem 0.9rem;
+    border-radius: 0.6rem;
+    text-decoration: none;
+    color: inherit;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+#main-sidebar .sidebar-link:hover {
+    background: rgba(255, 255, 255, 0.06);
+    color: #fff;
+}
+#main-sidebar .sidebar-link.active {
+    background: #111a33;
+    color: #fff;
+}
+
+/* MOBILE: off-canvas */
+@media (max-width: 767.98px) {
+    #main-sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        transform: translateX(-100%);
+        transition: transform 0.25s ease;
+    }
+    #main-sidebar.is-open {
+        transform: translateX(0);
+    }
+
+    /* backdrop */
+    #sidebar-backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.4);
+        z-index: 30;
+        display: none;
+    }
+    #sidebar-backdrop.is-visible {
+        display: block;
+    }
+}

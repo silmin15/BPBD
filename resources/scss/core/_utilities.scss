@@ -1,0 +1,19 @@
+@use "./variables" as vars;
+
+.text-ellipsis {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+.shadow-soft {
+    box-shadow: vars.$shadow-soft; // pakai namespace
+}
+
+.rounded-lg {
+    border-radius: vars.$radius; // atau vars.$radius-lg kalau memang ada
+}
+
+/* helper spacing kecil kalau perlu */
+.gap-2 {
+    gap: 0.5rem;
+}

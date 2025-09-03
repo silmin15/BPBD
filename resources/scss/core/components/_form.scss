@@ -1,0 +1,104 @@
+@use "../variables" as v;
+.form {
+    max-width: 100%;
+}
+
+/* group */
+.form-group {
+    margin-bottom: 1rem;
+}
+.form-label {
+    display: block;
+    font-weight: 700;
+    color: #23262f;
+    margin-bottom: 0.35rem;
+}
+
+/* control umum */
+.form-control,
+.form-select,
+.form-textarea {
+    width: 100%;
+    height: 46px;
+    padding: 0.6rem 0.85rem;
+    border: 1.5px solid #d8dae0;
+    border-radius: 12px;
+    background: #fff;
+    font-size: 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+.form-textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+.form-control:focus,
+.form-select:focus,
+.form-textarea:focus {
+    outline: 0;
+    border-color: #6c87ff;
+    box-shadow: 0 0 0 4px rgba(108, 135, 255, 0.15);
+}
+
+/* states */
+.is-invalid {
+    border-color: #e11d48 !important;
+    box-shadow: 0 0 0 3px rgba(225, 29, 72, 0.15) !important;
+}
+.form-hint {
+    font-size: 0.85rem;
+    color: #64748b;
+    margin-top: 0.25rem;
+}
+.form-error {
+    font-size: 0.85rem;
+    color: #e11d48;
+    margin-top: 0.25rem;
+}
+
+/* inline: checkbox/switch kecil di baris judul */
+.form-check {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.form-check-input {
+    width: 18px;
+    height: 18px;
+    border: 2px solid #1f2430;
+    border-radius: 4px;
+}
+
+/* bar aksi di bawah form */
+.form-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    justify-content: flex-end;
+    margin-top: 0.75rem;
+}
+
+/* grid sederhana untuk halaman */
+.form-grid {
+    display: grid;
+    gap: 0.9rem;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+.col-12 {
+    grid-column: span 12;
+}
+.col-6 {
+    grid-column: span 6;
+}
+.col-4 {
+    grid-column: span 4;
+}
+.col-3 {
+    grid-column: span 3;
+}
+@media (max-width: 768px) {
+    .col-6,
+    .col-4,
+    .col-3 {
+        grid-column: span 12;
+    }
+}

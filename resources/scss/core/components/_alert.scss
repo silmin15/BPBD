@@ -1,0 +1,42 @@
+@use "../variables" as v;
+.ui-alert {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.75rem 0.9rem;
+    border-radius: 12px;
+    border: 1px solid transparent;
+    margin: 0.5rem 0;
+}
+.ui-alert__close {
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0.2rem;
+}
+.ui-alert__content {
+    flex: 1;
+}
+
+.ui-alert--info {
+    background: #eff6ff;
+    border-color: #bfdbfe;
+    color: #1e3a8a;
+}
+.ui-alert--success {
+    background: #ecfdf5;
+    border-color: #bbf7d0;
+    color: #065f46;
+}
+.ui-alert--warning {
+    background: #fffbeb;
+    border-color: #fde68a;
+    color: #92400e;
+}
+.ui-alert--danger {
+    background: #fef2f2;
+    border-color: #fecaca;
+    color: #991b1b;
+}

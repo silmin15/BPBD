@@ -1,0 +1,34 @@
+@use "../variables" as v;
+.page-header-container {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: v.$radius;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+    box-shadow: v.$shadow;
+}
+.page-title {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-weight: 800;
+    font-size: 1.25rem;
+    color: #0f172a;
+}
+.page-title .bi {
+    font-size: 1.2rem;
+    color: #334155;
+}
+.breadcrumb {
+    margin: 0.25rem 0 0;
+    color: #64748b;
+    font-size: 0.875rem;
+}
+.breadcrumb-item + .breadcrumb-item::before {
+    content: "/";
+    margin: 0 0.4rem;
+    color: #94a3b8;
+}
+.page-actions .btn {
+    margin-left: 0.25rem;
+}

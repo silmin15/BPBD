@@ -1,0 +1,42 @@
+/* Overlay dasar */
+.bpbd-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    transition: opacity 0.2s ease;
+}
+.bpbd-overlay[aria-hidden="true"] {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Modal filter */
+.bpbd-modal {
+    background: #fff;
+    border-radius: 0.5rem;
+    padding: 1.25rem;
+    max-width: 800px;
+    width: 100%;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Tombol di header filter */
+.bpbd-modal .btn-close {
+    background: none;
+    border: none;
+    font-size: 1.3rem;
+    opacity: 0.6;
+}
+.bpbd-modal .btn-close:hover {
+    opacity: 1;
+}
+
+/* Info jumlah terpilih */
+#selected-count {
+    font-weight: 600;
+    color: #374151;
+}

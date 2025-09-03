@@ -1,0 +1,29 @@
+/* ========== BASE ========== */
+@use "core/variables" as v;
+@use "core/reset";
+@use "core/utilities";
+
+/* ========== VENDOR (Bootstrap) ========== */
+/* kalau mau override variabel Bootstrap, lakukan di sini */
+@use "bootstrap/scss/bootstrap" with (
+    $primary: v.$brand-primary
+);
+
+/* ========== LAYOUT ========== */
+@use "core/layout/header";
+@use "core/layout/topbar";
+@use "core/layout/sidebar";
+@use "core/layout/footer";
+
+/* ========== COMPONENTS ========== */
+@use "core/components/alert";
+@use "core/components/card";
+@use "core/components/dropdown";
+@use "core/components/form";
+@use "core/components/modal";
+@use "core/components/table";
+@use "core/components/button";
+@use "core/components/searchbar";
+
+/* ========== PAGES ========== */
+@use "role/publik/map"; /* SCSS khusus halaman peta (tinggi #map dll) */

@@ -1,0 +1,23 @@
+@use "../variables" as v;
+.bpbd-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    display: grid;
+    place-items: center;
+    z-index: 60;
+}
+.bpbd-modal {
+    width: min(720px, 92vw);
+    background: #fff;
+    border-radius: v.$radius;
+    padding: 1rem;
+    box-shadow: v.$shadow-soft;
+    border: 1px solid #e2e8f0;
+}
+.login-glass {
+    background: rgba(255, 255, 255, 0.92); // transparan putih
+    backdrop-filter: blur(6px); // efek blur
+    -webkit-backdrop-filter: blur(6px);
+    border: none;
+}

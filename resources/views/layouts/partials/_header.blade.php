@@ -1,25 +1,19 @@
-<header class="navbar navbar-expand-lg navbar-dark bg-orange py-2 shadow-sm">
-    <div class="container-fluid">
-        <a class="navbar-brand d-flex align-items-center fw-bold" href="{{ url('/') }}">
-            <img src="{{ asset('images/logo-bpbd.png') }}" alt="Logo BPBD" width="40" height="40" class="d-inline-block align-text-top me-3">
-            BPBD Banjarnegara
-        </a>
+<div class="flex items-center justify-between gap-3 flex-wrap mb-4">
+    <div>
 
-        <div class="ms-auto d-flex align-items-center">
-            <nav class="navbar-nav d-none d-lg-flex">
-                <a class="nav-link text-white" href="#">Peta Bencana</a>
-                <a class="nav-link text-white" href="#">Grafik</a>
-                <a class="nav-link text-white" href="#" data-bs-toggle="modal" data-bs-target="#loginModal">Inventaris BPBD</a>
-            </nav>
+        <h1 class="flex items-center gap-2 text-xl font-semibold text-slate-800">
+            @yield('page_icon')
+            @yield('page_title', 'Dashboard')
+        </h1>
 
-            <div class="theme-toggle mx-3">
-                <button class="btn btn-outline-light">
-                    <i class="bi bi-moon-stars-fill"></i> / <i class="bi bi-sun-fill"></i>
-                </button>
-            </div>
-
-            <a href="#" class="btn btn-primary fw-bold">Login</a>
-
-        </div>
+        <ol class="breadcrumb text-sm text-slate-500 mt-1">
+            <li class="breadcrumb-item active">
+                @yield('page_breadcrumb', 'Statistik')
+            </li>
+        </ol>
     </div>
-</header>
+
+    <div class="flex items-center gap-2">
+        @yield('page_actions')
+    </div>
+</div>

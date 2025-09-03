@@ -1,0 +1,12 @@
+@use "../variables" as v;
+
+#main-content {
+    margin-top: var(--topbar-h, 56px);
+    padding: 1rem;
+    transition: margin-left 0.25s ease;
+}
+
+/* Sidebar aktif → geser konten */
+body.with-sidebar #main-content {
+    margin-left: var(--sb-w, 18rem);
+}

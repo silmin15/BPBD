@@ -1,0 +1,12 @@
+@use "../../core/variables" as v;
+#map {
+    height: calc(100vh - 260px); // sesuaikan tinggi header+footer
+    min-height: 420px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.map-container {
+    background: #fff;
+    border-radius: 12px;
+}

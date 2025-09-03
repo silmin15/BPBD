@@ -9,7 +9,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\Auth\LoginRequest;
-use App\Providers\RouteServiceProvider;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -22,28 +21,44 @@ class AuthenticatedSessionController extends Controller
     }
 
     /**
+     * Tentukan URL home berdasarkan role (prioritas tegas).
+     */
+    private function homeFor($user): string
+    {
+        if ($user->hasRole('Super Admin')) return route('admin.dashboard');
+        if ($user->hasRole('PK'))          return route('pk.dashboard');
+        if ($user->hasRole('KL'))          return route('kl.dashboard');
+        if ($user->hasRole('RR'))          return route('rr.dashboard');
+        if ($user->hasRole('Staf BPBD'))   return route('admin.inventaris.index');
+        return route('dashboard'); // fallback jika belum punya role
+    }
+
+    /**
      * Handle an incoming authentication request.
      */
     public function store(LoginRequest $request): RedirectResponse|JsonResponse
     {
+        // Auth & regenerate session
         $request->authenticate();
-
         $request->session()->regenerate();
 
+        $user = $request->user();
+        $to   = $this->homeFor($user);
+
+        // Hindari "nyasar" karena intended URL lama
+        $request->session()->forget('url.intended');
+
+        // AJAX login (fetch) -> balas JSON konsisten
         if ($request->expectsJson()) {
-            return response()->json(['status' => 'success']); // JAWAB DENGAN JSON
+            return response()->json([
+                'status'       => 'success',
+                'redirect_url' => $to,
+            ]);
         }
 
-        // JIKA BUKAN AJAX, LANJUTKAN DENGAN REDIRECT
-        $user = Auth::user();
-
-        if ($user->hasRole('Staf BPBD')) {
-            return redirect()->intended('/inventaris');
-        }
-
-        return redirect()->intended('/dashboard');
+        // Non-AJAX
+        return redirect()->to($to);
     }
-
 
     /**
      * Destroy an authenticated session.
@@ -53,7 +68,6 @@ class AuthenticatedSessionController extends Controller
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
 
         return redirect('/');

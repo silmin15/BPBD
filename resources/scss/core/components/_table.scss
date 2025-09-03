@@ -1,0 +1,66 @@
+@use "../variables" as v;
+.table-card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: v.$radius;
+    box-shadow: v.$shadow;
+}
+
+.bpbd-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+.bpbd-table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: v.$brand-primary;
+    color: #fff;
+    font-weight: 700;
+    text-align: left;
+    padding: 16px 18px;
+    font-size: 1rem;
+}
+.bpbd-table tbody td {
+    background: #fff;
+    padding: 14px 18px;
+    border-top: 1px solid #eef2f7;
+    vertical-align: middle;
+    color: #1f2937;
+}
+.bpbd-table tbody tr:hover td {
+    background: #fff7f1;
+}
+
+/* kolom utilitas */
+.col-actions {
+    width: 140px;
+    text-align: center;
+    white-space: nowrap;
+}
+.is-num {
+    text-align: right;
+}
+.is-mono {
+    font-variant-numeric: tabular-nums;
+}
+
+/* varian rapat (compact) */
+.table--compact thead th {
+    padding: 12px 14px;
+}
+.table--compact tbody td {
+    padding: 10px 14px;
+}
+
+/* responsif wrapper */
+.table-responsive {
+    overflow-x: auto;
+}
+
+/* baris ringkasan */
+.row-summary {
+    background: #fff7b5;
+    font-weight: 700;
+}
