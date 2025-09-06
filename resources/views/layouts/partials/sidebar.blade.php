@@ -58,6 +58,11 @@
                 class="sidebar-link {{ request()->routeIs('admin.manajemen-user.*') ? 'active' : '' }}">
                 <i class="bi bi-people-fill me-2"></i> Manajemen User
             </a>
+            <a href="{{ route('admin.sk.index') }}"
+                class="sidebar-link {{ request()->routeIs('admin.sk.*') ? 'active' : '' }}">
+                <i class="bi bi-journal-text me-2"></i> Data & Rekap SK
+            </a>
+
 
         @endrole
 
@@ -71,6 +76,9 @@
             <a href="{{ route('pk.lap-kegiatan.index') }}"
                 class="sidebar-link {{ request()->routeIs('pk.lap-kegiatan.*') ? 'active' : '' }}">
                 <i class="bi bi-file-text-fill me-2"></i> Input Kegiatan
+            </a>
+            <a href="{{ route('pk.sk.index') }}" class="sidebar-link {{ request()->routeIs('pk.sk.*') ? 'active' : '' }}">
+                <i class="bi bi-journal-text me-2"></i> Data & Rekap SK
             </a>
         @endrole
 
@@ -87,13 +95,8 @@
             </a>
 
             @php
-                $logistikIndexRoute = Route::has('role.kl.logistik.index')
-                    ? 'role.kl.logistik.index'
-                    : (Route::has('kl.logistik.index')
-                        ? 'kl.logistik.index'
-                        : null);
-
-                $isLogistikActive = request()->routeIs('role.kl.logistik.*') || request()->routeIs('kl.logistik.*');
+                $logistikIndexRoute = Route::has('kl.logistik.index') ? 'kl.logistik.index' : null;
+                $isLogistikActive = request()->routeIs('kl.logistik.*');
 
                 $thisYear = now()->year;
                 $years = range($thisYear, $thisYear - 5);
@@ -104,26 +107,9 @@
                     <i class="bi bi-box-seam-fill me-2"></i> Input Logistik
                 </a>
             @endif
-            @php
-                $skIndexRoute = Route::has('kl.sk.index') ? 'kl.sk.index' : null;
-                $skRekapYearsRoute = Route::has('kl.sk.rekap.years') ? 'kl.sk.rekap.years' : null;
-
-                // active states
-                $isSkCrudActive = request()->routeIs('kl.sk.*') && !request()->routeIs('kl.sk.rekap.*');
-                $isSkRekapActive = request()->routeIs('kl.sk.rekap.*');
-            @endphp
-
-            @if ($skIndexRoute)
-                <a href="{{ route($skIndexRoute) }}" class="sidebar-link {{ $isSkCrudActive ? 'active' : '' }}">
-                    <i class="bi bi-file-earmark-text-fill me-2"></i> Data SK
-                </a>
-            @endif
-
-            @if ($skRekapYearsRoute)
-                <a href="{{ route($skRekapYearsRoute) }}" class="sidebar-link {{ $isSkRekapActive ? 'active' : '' }}">
-                    <i class="bi bi-clipboard2-check-fill me-2"></i> Rekap SK
-                </a>
-            @endif
+            <a href="{{ route('kl.sk.index') }}" class="sidebar-link {{ request()->routeIs('rr.sk.*') ? 'active' : '' }}">
+                <i class="bi bi-journal-text me-2"></i> Data & Rekap SK
+            </a>
         @endrole
 
         {{-- ====== RR ====== --}}
@@ -136,6 +122,9 @@
             <a href="{{ route('rr.lap-kegiatan.index') }}"
                 class="sidebar-link {{ request()->routeIs('rr.lap-kegiatan.*') ? 'active' : '' }}">
                 <i class="bi bi-file-text-fill me-2"></i> Input Kegiatan
+            </a>
+            <a href="{{ route('rr.sk.index') }}" class="sidebar-link {{ request()->routeIs('rr.sk.*') ? 'active' : '' }}">
+                <i class="bi bi-journal-text me-2"></i> Data & Rekap SK
             </a>
         @endrole
 

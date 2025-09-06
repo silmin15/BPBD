@@ -6,13 +6,13 @@
 
 @section('page_actions')
     @if ($activeTab === 'data')
-        <a href="{{ route('kl.sk.create') }}" class="btn-orange">
+        <a href="{{ route($routeBase . '.sk.create') }}" class="btn-orange">
             <i class="bi bi-plus-lg"></i> Tambah SK
         </a>
     @else
         {{-- Aksi untuk tab Rekap --}}
-        @if (Route::has('kl.sk.rekap.years'))
-            <a href="{{ route('kl.sk.rekap.years') }}" class="btn btn-warning me-2">
+        @if (Route::has($routeBase . '.sk.rekap.years'))
+            <a href="{{ route($routeBase . '.sk.rekap.years') }}" class="btn btn-warning me-2">
                 <i class="bi bi-arrow-left"></i> Kembali
             </a>
         @endif
@@ -23,29 +23,31 @@
     @endif
 @endsection
 
-
 @section('content')
     <div class="container-fluid px-0">
 
         {{-- Tabs switcher --}}
         <div class="d-flex gap-2 mb-3">
-            <a href="{{ route('kl.sk.index', ['tab' => 'data']) }}"
+            <a href="{{ route($routeBase . '.sk.index', ['tab' => 'data']) }}"
                 class="btn {{ $activeTab === 'data' ? 'btn-primary' : 'btn-outline-primary' }}">
                 Data SK
             </a>
-            <a href="{{ route('kl.sk.index', ['tab' => 'rekap', 'year' => $year]) }}"
+
+            <a href="{{ route($routeBase . '.sk.index', ['tab' => 'rekap', 'year' => $year]) }}"
                 class="btn {{ $activeTab === 'rekap' ? 'btn-primary' : 'btn-outline-primary' }}">
                 Rekap SK
             </a>
+
             @if ($activeTab === 'rekap')
                 {{-- pilih tahun (mirip rekap-years → tetap di halaman ini) --}}
                 <div class="ms-auto">
-                    <form method="GET" action="{{ route('kl.sk.index') }}" class="d-inline">
+                    <form method="GET" action="{{ route($routeBase . '.sk.index') }}" class="d-inline">
                         <input type="hidden" name="tab" value="rekap">
                         <select name="year" class="form-select form-select-sm d-inline w-auto"
                             onchange="this.form.submit()">
                             @for ($y = now()->year + 1; $y >= now()->year - 6; $y--)
-                                <option value="{{ $y }}" {{ $y == $year ? 'selected' : '' }}>{{ $y }}
+                                <option value="{{ $y }}" {{ $y == $year ? 'selected' : '' }}>
+                                    {{ $y }}
                                 </option>
                             @endfor
                         </select>
@@ -92,9 +94,10 @@
 
                                 <td class="text-center">
                                     @if ($sk->pdf_path)
-                                        <a href="{{ route('kl.sk.download', $sk) }}" target="_blank"
+                                        <a href="{{ route($routeBase . '.sk.download', $sk) }}" target="_blank"
                                             class="text-danger d-inline-flex align-items-center gap-1">
-                                            <i class="bi bi-file-pdf"></i> <span class="d-none d-sm-inline">Unduh</span>
+                                            <i class="bi bi-file-pdf"></i>
+                                            <span class="d-none d-sm-inline">Unduh</span>
                                         </a>
                                     @else
                                         <span class="text-muted">—</span>
@@ -102,9 +105,9 @@
                                 </td>
 
                                 <td class="text-center text-nowrap">
-                                    <a href="{{ route('kl.sk.edit', $sk) }}" class="btn-edit me-1">Edit</a>
-                                    <form action="{{ route('kl.sk.destroy', $sk) }}" method="POST" class="d-inline"
-                                        onsubmit="return confirm('Hapus SK ini?')">
+                                    <a href="{{ route($routeBase . '.sk.edit', $sk) }}" class="btn-edit me-1">Edit</a>
+                                    <form action="{{ route($routeBase . '.sk.destroy', $sk) }}" method="POST"
+                                        class="d-inline" onsubmit="return confirm('Hapus SK ini?')">
                                         @csrf @method('DELETE')
                                         <button class="btn-delete">Hapus</button>
                                     </form>
@@ -124,11 +127,10 @@
             </div>
         </div>
 
-
         {{-- ============================== TAB: REKAP ============================= --}}
         <div class="{{ $activeTab === 'rekap' ? '' : 'd-none' }}">
-            <form method="GET" action="{{ route('kl.sk.rekap.pdf', $year) }}" target="_blank" id="form-selected"
-                class="mb-3">
+            <form method="GET" action="{{ route($routeBase . '.sk.rekap.pdf', $year) }}" target="_blank"
+                id="form-selected" class="mb-3">
 
                 <div class="d-flex align-items-center gap-3 mb-2 flex-wrap">
                     <label class="form-check d-inline-flex align-items-center gap-2 mb-0">
@@ -184,10 +186,10 @@
                                         </td>
                                         <td class="text-center">
                                             @if ($sk->pdf_path)
-                                                <a href="{{ route('kl.sk.download', $sk) }}" target="_blank"
+                                                <a href="{{ route($routeBase . '.sk.download', $sk) }}" target="_blank"
                                                     class="text-danger d-inline-flex align-items-center gap-1">
-                                                    <i class="bi bi-file-pdf"></i> <span
-                                                        class="d-none d-sm-inline">Unduh</span>
+                                                    <i class="bi bi-file-pdf"></i>
+                                                    <span class="d-none d-sm-inline">Unduh</span>
                                                 </a>
                                             @else
                                                 <span class="text-muted">—</span>
@@ -197,8 +199,9 @@
                                 @endforeach
                             @empty
                                 <tr>
-                                    <td colspan="7" class="text-center text-slate-500 py-6">Belum ada data pada tahun
-                                        ini.</td>
+                                    <td colspan="7" class="text-center text-slate-500 py-6">
+                                        Belum ada data pada tahun ini.
+                                    </td>
                                 </tr>
                             @endforelse
                         </tbody>
@@ -212,4 +215,6 @@
                 </div>
             </form>
         </div>
-    @endsection
+
+    </div>
+@endsection

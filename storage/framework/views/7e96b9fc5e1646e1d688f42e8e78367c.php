@@ -21,7 +21,7 @@
             <i class="bi bi-funnel"></i> Filter
         </button>
 
-        <a class="btn-orange" href="<?php echo e(route('role.kl.logistik.create')); ?>">
+        <a class="btn-orange" href="<?php echo e(route('kl.logistik.create')); ?>">
             <i class="bi bi-plus-lg"></i> Buat Laporan
         </a>
     </form>
@@ -29,14 +29,14 @@
 <?php $__env->startSection('content'); ?>
     <?php if (isset($component)) { $__componentOriginal4473e8639534cb1dd5b08ec3278f89d2 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal4473e8639534cb1dd5b08ec3278f89d2 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.kl.logistik.filter-overlay','data' => ['submitRoute' => route('role.kl.logistik.index')]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.kl.logistik.filter-overlay','data' => ['submitRoute' => route('kl.logistik.index')]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('kl.logistik.filter-overlay'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['submit-route' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(route('role.kl.logistik.index'))]); ?>
+<?php $component->withAttributes(['submit-route' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(route('kl.logistik.index'))]); ?>
 <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal4473e8639534cb1dd5b08ec3278f89d2)): ?>
@@ -47,7 +47,7 @@
 <?php $component = $__componentOriginal4473e8639534cb1dd5b08ec3278f89d2; ?>
 <?php unset($__componentOriginal4473e8639534cb1dd5b08ec3278f89d2); ?>
 <?php endif; ?>
-    <div class="container px-0">
+    <div class="container-fluid px-0">
 
         <?php if(session('success')): ?>
             <div class="alert alert-success"><?php echo e(session('success')); ?></div>
@@ -84,8 +84,8 @@
                             <td class="text-end"><?php echo e($qty($it->sisa_barang)); ?></td>
                             <td class="text-end"><?php echo e($idr($it->sisa_harga)); ?></td>
                             <td class="text-center text-nowrap">
-                                <a href="<?php echo e(route('role.kl.logistik.edit', $it)); ?>" class="btn-edit">Edit</a>
-                                <form action="<?php echo e(route('role.kl.logistik.destroy', $it)); ?>" method="POST" class="d-inline"
+                                <a href="<?php echo e(route('kl.logistik.edit', $it)); ?>" class="btn-edit">Edit</a>
+                                <form action="<?php echo e(route('kl.logistik.destroy', $it)); ?>" method="POST" class="d-inline"
                                     onsubmit="return confirm('Hapus data ini?')">
                                     <?php echo csrf_field(); ?> <?php echo method_field('DELETE'); ?>
                                     <button type="submit" class="btn-delete">Hapus</button>

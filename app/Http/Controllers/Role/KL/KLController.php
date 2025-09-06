@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Role;
+namespace App\Http\Controllers\Role\KL;
 
 use App\Http\Controllers\Controller;
 

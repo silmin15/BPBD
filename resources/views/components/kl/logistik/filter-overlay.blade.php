@@ -1,5 +1,5 @@
 @props([
-    'submitRoute' => route('role.kl.logistik.index'),
+    'submitRoute' => route('kl.logistik.index'),
 ])
 
 <div id="filter-overlay" class="bpbd-overlay" aria-hidden="true" hidden>

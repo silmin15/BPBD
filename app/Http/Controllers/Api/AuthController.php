@@ -29,8 +29,8 @@ class AuthController extends Controller
         $user = Auth::user();
 
         // 4. Tentukan tujuan redirect berdasarkan role
-        $redirectUrl = '/dashboard'; // Default
-        if ($user->hasRole('Staf BPBD')) {
+        $redirectUrl = '/dashboard'; // default
+        if (($user->role ?? null) === 'Staf BPBD') {   // sesuaikan nama kolomnya
             $redirectUrl = '/inventaris';
         }
 

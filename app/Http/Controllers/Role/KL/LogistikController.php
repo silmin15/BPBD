@@ -1,5 +1,4 @@
 <?php
-// app/Http/Controllers/KL/LogistikController.php
 
 namespace App\Http\Controllers\Role\KL;
 
@@ -10,18 +9,21 @@ use Illuminate\Support\Facades\Gate;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\DB;
 
-
 class LogistikController extends Controller
 {
     public function index(Request $r)
     {
-        $q = \App\Models\LogistikItem::query(); // ganti model sesuai punyamu
+        $q = LogistikItem::query();
+
+        // deteksi driver untuk LIKE vs ILIKE
+        $driver = config('database.default');
+        $like = $driver === 'pgsql' ? 'ilike' : 'like';
 
         // Pencarian nama/satuan
         if ($s = $r->input('q')) {
-            $q->where(function ($w) use ($s) {
-                $w->where('nama_barang', 'ilike', "%{$s}%")   // 'like' kalau MySQL
-                    ->orWhere('satuan', 'ilike', "%{$s}%");
+            $q->where(function ($w) use ($s, $like) {
+                $w->where('nama_barang', $like, "%{$s}%")
+                    ->orWhere('satuan', $like, "%{$s}%");
             });
         }
 
@@ -29,8 +31,8 @@ class LogistikController extends Controller
         if ($m = $r->input('month')) {
             if (preg_match('/^\d{4}-\d{1,2}$/', $m)) {
                 [$yy, $mm] = explode('-', $m);
-                $q->whereYear('tanggal', (int)$yy)
-                    ->whereMonth('tanggal', (int)$mm);
+                $q->whereYear('tanggal', (int) $yy)
+                    ->whereMonth('tanggal', (int) $mm);
             }
         }
 
@@ -47,16 +49,14 @@ class LogistikController extends Controller
 
         $items = $q->orderByDesc('tanggal')->paginate(15)->withQueryString();
 
+        // VIEW sesuai struktur: resources/views/role/kl/logistik/index.blade.php
         return view('role.kl.logistik.index', compact('items'));
     }
 
-
     public function create()
     {
-        // $this->authorize('logistik.manage');
         Gate::authorize('logistik.manage');
-
-        return view('role.kl.logistik.create'); // <-- path baru
+        return view('role.kl.logistik.create'); // resources/views/role/kl/logistik/create.blade.php
     }
 
     public function store(Request $r)
@@ -64,11 +64,11 @@ class LogistikController extends Controller
         Gate::authorize('logistik.manage');
 
         $data = $r->validate([
-            'tanggal'            => ['required', 'date'],
-            'items'              => ['required', 'array', 'min:1'],
-            'items.*.nama_barang' => ['required', 'string', 'max:255'],
-            'items.*.volume'     => ['required', 'integer', 'min:0'],
-            'items.*.satuan'     => ['required', 'string', 'max:50'],
+            'tanggal'              => ['required', 'date'],
+            'items'                => ['required', 'array', 'min:1'],
+            'items.*.nama_barang'  => ['required', 'string', 'max:255'],
+            'items.*.volume'       => ['required', 'integer', 'min:0'],
+            'items.*.satuan'       => ['required', 'string', 'max:50'],
             'items.*.harga_satuan' => ['required', 'numeric', 'min:0'],
             'items.*.jumlah_keluar' => ['nullable', 'integer', 'min:0'],
         ]);
@@ -77,9 +77,9 @@ class LogistikController extends Controller
         $uid = $r->user()->id;
 
         foreach ($data['items'] as $row) {
-            $vol    = (int)$row['volume'];
-            $harga  = (float)$row['harga_satuan'];
-            $keluar = (int)($row['jumlah_keluar'] ?? 0);
+            $vol    = (int) $row['volume'];
+            $harga  = (float) $row['harga_satuan'];
+            $keluar = (int) ($row['jumlah_keluar'] ?? 0);
 
             $jumlah_harga        = $vol * $harga;
             $jumlah_harga_keluar = $keluar * $harga;
@@ -101,22 +101,18 @@ class LogistikController extends Controller
             ]);
         }
 
-        return redirect()->route('role.kl.logistik.logistik.index')
+        return redirect()->route('kl.logistik.index')
             ->with('success', 'Semua data untuk tanggal ' . $tanggal . ' tersimpan.');
     }
 
-    // ====== OPSIONAL (hapus bila tak butuh edit) ======
     public function edit(LogistikItem $item)
     {
-        // $this->authorize('update', $item);
         Gate::authorize('update', $item);
-
-        return view('role.kl.logistik.edit', compact('item')); // <-- path baru
+        return view('role.kl.logistik.edit', compact('item'));
     }
 
     public function update(Request $r, LogistikItem $item)
     {
-        // $this->authorize('update', $item);
         Gate::authorize('update', $item);
 
         $data = $r->validate([
@@ -128,9 +124,9 @@ class LogistikController extends Controller
             'jumlah_keluar' => ['nullable', 'integer', 'min:0'],
         ]);
 
-        $volume = (int)   $data['volume'];
+        $volume = (int) $data['volume'];
         $harga  = (float) $data['harga_satuan'];
-        $keluar = (int)  ($data['jumlah_keluar'] ?? 0);
+        $keluar = (int) ($data['jumlah_keluar'] ?? 0);
 
         $data['jumlah_harga']        = $volume * $harga;
         $data['jumlah_harga_keluar'] = $keluar * $harga;
@@ -139,38 +135,40 @@ class LogistikController extends Controller
 
         $item->update($data);
 
-        return redirect()->route('role.kl.logistik.logistik.index')->with('success', 'Data logistik diperbarui.');
+        return redirect()->route('kl.logistik.index')->with('success', 'Data logistik diperbarui.');
     }
 
     public function destroy(LogistikItem $item)
     {
-        // $this->authorize('delete', $item);
         Gate::authorize('delete', $item);
-
         $item->delete();
         return back()->with('success', 'Data logistik dihapus.');
     }
+
+    /** ---------------- Rekap ---------------- */
+
     public function rekap($tahun)
     {
-        // Ambil semua logistik per tahun, group by tanggal
-        $items = \App\Models\LogistikItem::whereYear('tanggal', $tahun)
+        $items = LogistikItem::whereYear('tanggal', $tahun)
             ->orderBy('tanggal')
             ->get()
             ->groupBy(fn($it) => $it->tanggal->format('d/m/Y'));
 
-        return view('role.kl.logistik.logistik.rekap', compact('items', 'tahun'));
+        // resources/views/role/kl/logistik/rekap.blade.php
+        return view('role.kl.logistik.rekap', compact('items', 'tahun'));
     }
 
     public function rekapPdf($tahun)
     {
-        $items = \App\Models\LogistikItem::whereYear('tanggal', $tahun)
+        $items = LogistikItem::whereYear('tanggal', $tahun)
             ->orderBy('tanggal')
             ->get()
             ->groupBy(fn($it) => $it->tanggal->format('d/m/Y'));
 
-        $pdf = Pdf::loadView('role.kl.logistik.logistik.rekap_pdf', compact('items', 'tahun'))
+        // resources/views/role/kl/logistik/rekap_pdf.blade.php
+        $pdf = Pdf::loadView('role.kl.logistik.rekap_pdf', compact('items', 'tahun'))
             ->setPaper('a4', 'landscape');
 
-        return $pdf->stream("Rekap-Logistik-$tahun.pdf");
+        return $pdf->stream("Rekap-Logistik-{$tahun}.pdf");
     }
 }

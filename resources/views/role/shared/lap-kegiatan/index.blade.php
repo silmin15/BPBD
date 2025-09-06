@@ -29,7 +29,7 @@
 @section('content')
     <x-lap-kegiatan.filter-overlay :submit-route="route(strtolower($ctx) . '.lap-kegiatan.index')" />
 
-    <div class="container px-0">
+    <div class="container-fluid px-0">
 
         {{-- Flash message --}}
         @if (session('success'))

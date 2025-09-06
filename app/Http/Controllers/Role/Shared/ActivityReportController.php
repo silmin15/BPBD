@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Role;
+namespace App\Http\Controllers\Role\Shared;
 
 use App\Http\Controllers\Controller;
 use App\Models\ActivityReport;
@@ -50,7 +50,7 @@ class ActivityReportController extends Controller
             ->paginate(15)
             ->withQueryString();
 
-        return view('role.lap-kegiatan.index', [
+        return view('role.shared.lap-kegiatan.index', [
             'ctx'   => $ctx,      // tetap kirim ctx agar blade bisa bangun route: kl./pk./rr.
             'items' => $items,
         ]);
@@ -66,7 +66,7 @@ class ActivityReportController extends Controller
 
     public function create(Request $r)
     {
-        return view('role.lap-kegiatan.form', ['ctx' => $this->ctx($r)]);
+        return view('role.shared.lap-kegiatan.form', ['ctx' => $this->ctx($r)]);
     }
 
     public function store(Request $r)
@@ -108,7 +108,7 @@ class ActivityReportController extends Controller
     {
         $ctx = $this->ctx($r);
         $this->authorizeAccess($r, $report, $ctx);
-        return view('role.lap-kegiatan.form', ['ctx' => $ctx, 'report' => $report]);
+        return view('role.shared.lap-kegiatan.form', ['ctx' => $ctx, 'report' => $report]);
     }
 
     public function update(Request $r, ActivityReport $report)
@@ -174,7 +174,7 @@ class ActivityReportController extends Controller
         $ctx = $this->ctx($r);
         $this->authorizeAccess($r, $report, $ctx);
 
-        $pdf = Pdf::loadView('role.lap-kegiatan.pdf', ['report' => $report, 'ctx' => $ctx])
+        $pdf = Pdf::loadView('role.shared.lap-kegiatan.pdf', ['report' => $report, 'ctx' => $ctx])
             ->setPaper('a4', 'portrait');
 
         return $pdf->download("Laporan-{$ctx}-{$report->id}.pdf");

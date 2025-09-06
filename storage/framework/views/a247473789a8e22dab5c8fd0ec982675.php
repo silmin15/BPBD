@@ -2,7 +2,9 @@
 
 $__newAttributes = [];
 $__propNames = \Illuminate\View\ComponentAttributeBag::extractPropNames(([
-    'submitRoute' => route('kl.logistik.index'),
+    'activeRole',
+    // route submit ke index role aktif
+    'submitRoute' => route('admin.rekap-kegiatan.rekap.role.index', $activeRole),
 ]));
 
 foreach ($attributes->all() as $__key => $__value) {
@@ -19,7 +21,9 @@ unset($__propNames);
 unset($__newAttributes);
 
 foreach (array_filter(([
-    'submitRoute' => route('kl.logistik.index'),
+    'activeRole',
+    // route submit ke index role aktif
+    'submitRoute' => route('admin.rekap-kegiatan.rekap.role.index', $activeRole),
 ]), 'is_string', ARRAY_FILTER_USE_KEY) as $__key => $__value) {
     $$__key = $$__key ?? $__value;
 }
@@ -33,34 +37,25 @@ foreach ($attributes->all() as $__key => $__value) {
 unset($__defined_vars, $__key, $__value); ?>
 
 <div id="filter-overlay" class="bpbd-overlay" aria-hidden="true" hidden>
-    <div class="bpbd-modal" role="dialog" aria-modal="true" aria-labelledby="filterKlTitle">
+    <div class="bpbd-modal" role="dialog" aria-modal="true" aria-labelledby="filterRekapTitle">
         <div class="d-flex justify-content-between align-items-center mb-2">
-            <h5 id="filterKlTitle" class="m-0">
-                <i class="bi bi-funnel"></i> Filter Laporan KL
+            <h5 id="filterRekapTitle" class="m-0">
+                <i class="bi bi-funnel"></i> Filter Rekap Laporan
             </h5>
             <button type="button" class="btn-close" id="close-filter" aria-label="Tutup"></button>
         </div>
 
         <form method="GET" action="<?php echo e($submitRoute); ?>" id="filter-form">
             <div class="row g-2">
-                <div class="col-md-6">
-                    <label class="form-label">Nama barang / satuan</label>
-                    <input type="text" name="q" class="form-control" placeholder="Contoh: beras / dus"
-                        value="<?php echo e(request('q')); ?>">
+                <div class="col-sm-6">
+                    <label class="form-label">Bulan</label>
+                    <input type="number" min="1" max="12" name="month" class="form-control"
+                        value="<?php echo e(request('month')); ?>">
                 </div>
-
-                <div class="col-md-6">
-                    <label class="form-label">Bulan (opsional)</label>
-                    <input type="month" name="month" class="form-control" value="<?php echo e(request('month')); ?>">
-                </div>
-
-                <div class="col-md-6">
-                    <label class="form-label">Tanggal mulai</label>
-                    <input type="date" name="start_date" class="form-control" value="<?php echo e(request('start_date')); ?>">
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label">Tanggal sampai</label>
-                    <input type="date" name="end_date" class="form-control" value="<?php echo e(request('end_date')); ?>">
+                <div class="col-sm-6">
+                    <label class="form-label">Tahun</label>
+                    <input type="number" min="2000" max="2100" name="year" class="form-control"
+                        value="<?php echo e(request('year') ?: now()->year); ?>">
                 </div>
             </div>
 
@@ -74,4 +69,4 @@ unset($__defined_vars, $__key, $__value); ?>
         </form>
     </div>
 </div>
-<?php /**PATH C:\laragon\www\BPBD\resources\views/components/kl/logistik/filter-overlay.blade.php ENDPATH**/ ?>
+<?php /**PATH C:\laragon\www\BPBD\resources\views/components/rekap/filter-overlay-monthyear.blade.php ENDPATH**/ ?>

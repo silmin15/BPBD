@@ -1,11 +1,9 @@
 <?php
-
-namespace App\Http\Controllers\Role\KL;
-
+namespace App\Http\Controllers\Role\RR;
 use App\Http\Controllers\Role\Shared\BaseSkController;
 
 class SkController extends BaseSkController
 {
-    protected string $routeBase = 'kl';
+    protected string $routeBase = 'rr';
     protected string $scope     = 'own';
 }

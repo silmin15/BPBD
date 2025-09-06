@@ -8,7 +8,7 @@
 
         <div class="card border-0 shadow-lg">
             <div class="card-body">
-                <form method="POST" action="{{ route('role.kl.logistik.update', $item) }}" id="formLogistik">
+                <form method="POST" action="{{ route('kl.logistik.update', $item) }}" id="formLogistik">
                     @csrf @method('PUT')
 
                     <div class="row g-3">
@@ -94,7 +94,7 @@
 
                     <div class="mt-4 d-flex gap-2">
                         <button class="btn btn-primary" type="submit">Simpan Perubahan</button>
-                        <a href="{{ route('role.kl.logistik.index') }}" class="btn btn-outline-secondary">Batal</a>
+                        <a href="{{ route('kl.logistik.index') }}" class="btn btn-outline-secondary">Batal</a>
                     </div>
                 </form>
             </div>

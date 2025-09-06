@@ -29,7 +29,7 @@ class AuthenticatedSessionController extends Controller
         if ($user->hasRole('PK'))          return route('pk.dashboard');
         if ($user->hasRole('KL'))          return route('kl.dashboard');
         if ($user->hasRole('RR'))          return route('rr.dashboard');
-        if ($user->hasRole('Staf BPBD'))   return route('admin.inventaris.index');
+        // if ($user->hasRole('Staf BPBD'))   return route('admin.inventaris.index');
         return route('dashboard'); // fallback jika belum punya role
     }
 

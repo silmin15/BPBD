@@ -12,7 +12,7 @@
     width: var(--sb-w);
     height: 100vh; /* penuh layar */
     background: #0f172a;
-    color: #cbd5e1;
+    color: #7a7d80;
     border-right: 1px solid #e5e7eb;
     overflow-y: auto;
     transition: transform 0.25s ease;
@@ -50,11 +50,11 @@ body.with-sidebar #main-sidebar {
     white-space: nowrap;
 }
 #main-sidebar .sidebar-link:hover {
-    background: rgba(255, 255, 255, 0.06);
+    background: rgba(59, 130, 246, 0.15);
     color: #fff;
 }
 #main-sidebar .sidebar-link.active {
-    background: #111a33;
+    background: linear-gradient(90deg, #2563eb, #1e40af);
     color: #fff;
 }
 

@@ -4,7 +4,7 @@
 @section('page_title', 'Input Logistik (Banyak Barang)')
 @section('page_icon') <i class="bi bi-box-seam-fill"></i> @endsection
 @section('page_actions')
-    <a href="{{ route('role.kl.logistik.index') }}" class="btn-orange">
+    <a href="{{ route('kl.logistik.index') }}" class="btn-orange">
         <i class="bi bi-arrow-left me-1"></i> Kembali
     </a>
 @endsection
@@ -21,7 +21,7 @@
             </div>
         @endif
 
-        <form id="formLogistik" method="POST" action="{{ route('role.kl.logistik.store') }}">
+        <form id="formLogistik" method="POST" action="{{ route('kl.logistik.store') }}">
             @csrf
 
             <div class="mb-3 d-flex align-items-center gap-3">

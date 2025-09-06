@@ -6,13 +6,13 @@
 
 <?php $__env->startSection('page_actions'); ?>
     <?php if($activeTab === 'data'): ?>
-        <a href="<?php echo e(route('kl.sk.create')); ?>" class="btn-orange">
+        <a href="<?php echo e(route($routeBase . '.sk.create')); ?>" class="btn-orange">
             <i class="bi bi-plus-lg"></i> Tambah SK
         </a>
     <?php else: ?>
         
-        <?php if(Route::has('kl.sk.rekap.years')): ?>
-            <a href="<?php echo e(route('kl.sk.rekap.years')); ?>" class="btn btn-warning me-2">
+        <?php if(Route::has($routeBase . '.sk.rekap.years')): ?>
+            <a href="<?php echo e(route($routeBase . '.sk.rekap.years')); ?>" class="btn btn-warning me-2">
                 <i class="bi bi-arrow-left"></i> Kembali
             </a>
         <?php endif; ?>
@@ -23,29 +23,31 @@
     <?php endif; ?>
 <?php $__env->stopSection(); ?>
 
-
 <?php $__env->startSection('content'); ?>
     <div class="container-fluid px-0">
 
         
         <div class="d-flex gap-2 mb-3">
-            <a href="<?php echo e(route('kl.sk.index', ['tab' => 'data'])); ?>"
+            <a href="<?php echo e(route($routeBase . '.sk.index', ['tab' => 'data'])); ?>"
                 class="btn <?php echo e($activeTab === 'data' ? 'btn-primary' : 'btn-outline-primary'); ?>">
                 Data SK
             </a>
-            <a href="<?php echo e(route('kl.sk.index', ['tab' => 'rekap', 'year' => $year])); ?>"
+
+            <a href="<?php echo e(route($routeBase . '.sk.index', ['tab' => 'rekap', 'year' => $year])); ?>"
                 class="btn <?php echo e($activeTab === 'rekap' ? 'btn-primary' : 'btn-outline-primary'); ?>">
                 Rekap SK
             </a>
+
             <?php if($activeTab === 'rekap'): ?>
                 
                 <div class="ms-auto">
-                    <form method="GET" action="<?php echo e(route('kl.sk.index')); ?>" class="d-inline">
+                    <form method="GET" action="<?php echo e(route($routeBase . '.sk.index')); ?>" class="d-inline">
                         <input type="hidden" name="tab" value="rekap">
                         <select name="year" class="form-select form-select-sm d-inline w-auto"
                             onchange="this.form.submit()">
                             <?php for($y = now()->year + 1; $y >= now()->year - 6; $y--): ?>
-                                <option value="<?php echo e($y); ?>" <?php echo e($y == $year ? 'selected' : ''); ?>><?php echo e($y); ?>
+                                <option value="<?php echo e($y); ?>" <?php echo e($y == $year ? 'selected' : ''); ?>>
+                                    <?php echo e($y); ?>
 
                                 </option>
                             <?php endfor; ?>
@@ -95,9 +97,10 @@
 
                                 <td class="text-center">
                                     <?php if($sk->pdf_path): ?>
-                                        <a href="<?php echo e(route('kl.sk.download', $sk)); ?>" target="_blank"
+                                        <a href="<?php echo e(route($routeBase . '.sk.download', $sk)); ?>" target="_blank"
                                             class="text-danger d-inline-flex align-items-center gap-1">
-                                            <i class="bi bi-file-pdf"></i> <span class="d-none d-sm-inline">Unduh</span>
+                                            <i class="bi bi-file-pdf"></i>
+                                            <span class="d-none d-sm-inline">Unduh</span>
                                         </a>
                                     <?php else: ?>
                                         <span class="text-muted">—</span>
@@ -105,9 +108,9 @@
                                 </td>
 
                                 <td class="text-center text-nowrap">
-                                    <a href="<?php echo e(route('kl.sk.edit', $sk)); ?>" class="btn-edit me-1">Edit</a>
-                                    <form action="<?php echo e(route('kl.sk.destroy', $sk)); ?>" method="POST" class="d-inline"
-                                        onsubmit="return confirm('Hapus SK ini?')">
+                                    <a href="<?php echo e(route($routeBase . '.sk.edit', $sk)); ?>" class="btn-edit me-1">Edit</a>
+                                    <form action="<?php echo e(route($routeBase . '.sk.destroy', $sk)); ?>" method="POST"
+                                        class="d-inline" onsubmit="return confirm('Hapus SK ini?')">
                                         <?php echo csrf_field(); ?> <?php echo method_field('DELETE'); ?>
                                         <button class="btn-delete">Hapus</button>
                                     </form>
@@ -128,11 +131,10 @@
             </div>
         </div>
 
-
         
         <div class="<?php echo e($activeTab === 'rekap' ? '' : 'd-none'); ?>">
-            <form method="GET" action="<?php echo e(route('kl.sk.rekap.pdf', $year)); ?>" target="_blank" id="form-selected"
-                class="mb-3">
+            <form method="GET" action="<?php echo e(route($routeBase . '.sk.rekap.pdf', $year)); ?>" target="_blank"
+                id="form-selected" class="mb-3">
 
                 <div class="d-flex align-items-center gap-3 mb-2 flex-wrap">
                     <label class="form-check d-inline-flex align-items-center gap-2 mb-0">
@@ -191,10 +193,10 @@
                                         </td>
                                         <td class="text-center">
                                             <?php if($sk->pdf_path): ?>
-                                                <a href="<?php echo e(route('kl.sk.download', $sk)); ?>" target="_blank"
+                                                <a href="<?php echo e(route($routeBase . '.sk.download', $sk)); ?>" target="_blank"
                                                     class="text-danger d-inline-flex align-items-center gap-1">
-                                                    <i class="bi bi-file-pdf"></i> <span
-                                                        class="d-none d-sm-inline">Unduh</span>
+                                                    <i class="bi bi-file-pdf"></i>
+                                                    <span class="d-none d-sm-inline">Unduh</span>
                                                 </a>
                                             <?php else: ?>
                                                 <span class="text-muted">—</span>
@@ -204,8 +206,9 @@
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                                 <tr>
-                                    <td colspan="7" class="text-center text-slate-500 py-6">Belum ada data pada tahun
-                                        ini.</td>
+                                    <td colspan="7" class="text-center text-slate-500 py-6">
+                                        Belum ada data pada tahun ini.
+                                    </td>
                                 </tr>
                             <?php endif; ?>
                         </tbody>
@@ -219,6 +222,8 @@
                 </div>
             </form>
         </div>
-    <?php $__env->stopSection(); ?>
 
-<?php echo $__env->make('layouts.app_admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\BPBD\resources\views/role/kl/sk/index.blade.php ENDPATH**/ ?>
+    </div>
+<?php $__env->stopSection(); ?>
+
+<?php echo $__env->make('layouts.app_admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\BPBD\resources\views/role/shared/sk/index.blade.php ENDPATH**/ ?>

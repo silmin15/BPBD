@@ -13,10 +13,10 @@
 @endsection
 
 @section('content')
-    <div class="container px-0">
+    <div class="container-fluid px-0">
 
         {{-- FILTER OVERLAY (komponen) --}}
-        <x-logistik.filter-overlay :year="$year" :filters="$filters ?? []" :kl-list="$klList" :submit-route="route('admin.logistik.rekap', $year)"
+        <x-admin.logistik.filter-overlay :year="$year" :filters="$filters ?? []" :kl-list="$klList" :submit-route="route('admin.logistik.rekap', $year)"
             :pdf-route="route('admin.logistik.rekap.pdf', $year)" />
 
         {{-- FORM untuk cetak yang dipilih --}}
@@ -28,7 +28,7 @@
 
             {{-- daftar bulan (komponen tabel per-bulan) --}}
             @foreach ($byMonth as $ym => $rows)
-                <x-logistik.month-table :ym="$ym" :rows="$rows" :sum="$monthly[$ym] ?? []" />
+                <x-admin.logistik.month-table :ym="$ym" :rows="$rows" :sum="$monthly[$ym] ?? []" />
             @endforeach
         </form>
 

@@ -21,14 +21,14 @@
             <i class="bi bi-funnel"></i> Filter
         </button>
 
-        <a class="btn-orange" href="{{ route('role.kl.logistik.create') }}">
+        <a class="btn-orange" href="{{ route('kl.logistik.create') }}">
             <i class="bi bi-plus-lg"></i> Buat Laporan
         </a>
     </form>
 @endsection
 @section('content')
-    <x-kl.logistik.filter-overlay :submit-route="route('role.kl.logistik.index')" />
-    <div class="container px-0">
+    <x-kl.logistik.filter-overlay :submit-route="route('kl.logistik.index')" />
+    <div class="container-fluid px-0">
 
         @if (session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
@@ -65,8 +65,8 @@
                             <td class="text-end">{{ $qty($it->sisa_barang) }}</td>
                             <td class="text-end">{{ $idr($it->sisa_harga) }}</td>
                             <td class="text-center text-nowrap">
-                                <a href="{{ route('role.kl.logistik.edit', $it) }}" class="btn-edit">Edit</a>
-                                <form action="{{ route('role.kl.logistik.destroy', $it) }}" method="POST" class="d-inline"
+                                <a href="{{ route('kl.logistik.edit', $it) }}" class="btn-edit">Edit</a>
+                                <form action="{{ route('kl.logistik.destroy', $it) }}" method="POST" class="d-inline"
                                     onsubmit="return confirm('Hapus data ini?')">
                                     @csrf @method('DELETE')
                                     <button type="submit" class="btn-delete">Hapus</button>

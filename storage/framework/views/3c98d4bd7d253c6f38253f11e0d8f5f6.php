@@ -4,7 +4,7 @@
 <?php $__env->startSection('page_title', 'Input Logistik (Banyak Barang)'); ?>
 <?php $__env->startSection('page_icon'); ?> <i class="bi bi-box-seam-fill"></i> <?php $__env->stopSection(); ?>
 <?php $__env->startSection('page_actions'); ?>
-    <a href="<?php echo e(route('role.kl.logistik.index')); ?>" class="btn-orange">
+    <a href="<?php echo e(route('kl.logistik.index')); ?>" class="btn-orange">
         <i class="bi bi-arrow-left me-1"></i> Kembali
     </a>
 <?php $__env->stopSection(); ?>
@@ -21,7 +21,7 @@
             </div>
         <?php endif; ?>
 
-        <form id="formLogistik" method="POST" action="<?php echo e(route('role.kl.logistik.store')); ?>">
+        <form id="formLogistik" method="POST" action="<?php echo e(route('kl.logistik.store')); ?>">
             <?php echo csrf_field(); ?>
 
             <div class="mb-3 d-flex align-items-center gap-3">
