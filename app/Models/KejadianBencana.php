@@ -25,6 +25,8 @@ class KejadianBencana extends Model
         'tanggal_kejadian',
         'waktu_kejadian',
         'keterangan',
+        'geofile_path',
+        'geofile_name',
     ];
 
     public function jenisBencana(): BelongsTo

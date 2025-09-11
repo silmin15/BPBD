@@ -93,7 +93,7 @@ class UserController extends Controller
 
         $redirectRole = $r->input('redirect_role');
         return $redirectRole
-            ? redirect()->route('role.admin.manajemen-user.byrole', $redirectRole)->with('success', 'User dibuat dan aktif.')
+            ? redirect()->route('admin.manajemen-user.byrole', $redirectRole)->with('success', 'User dibuat dan aktif.')
             : back()->with('success', 'User dibuat dan aktif.');
     }
 

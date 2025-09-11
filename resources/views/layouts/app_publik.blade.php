@@ -13,6 +13,24 @@
     {{-- Ikon & Leaflet CSS --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
+    {{-- Stack: styles khusus halaman --}}
+    @stack('styles')
+
+    <style>
+        /* Beri ruang di atas untuk navbar fixed */
+        body { padding-top: 70px; }
+
+        /* Pastikan navbar selalu di atas */
+        .navbar.fixed-top { z-index: 2000; }
+
+        /* Map dan kontrol berada di bawah overlay/offcanvas */
+        .leaflet-container { z-index: 1; }
+        .leaflet-top, .leaflet-bottom { z-index: 1; }
+
+        /* Offcanvas filter di atas peta */
+        .offcanvas { z-index: 2100; }
+    </style>
 </head>
 
 <body class="d-flex flex-column min-vh-100">
@@ -31,6 +49,9 @@
 
     {{-- Leaflet JS (harus ada agar peta hidup) --}}
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    {{-- Stack: scripts khusus halaman --}}
+    @stack('scripts')
 </body>
 
 </html>

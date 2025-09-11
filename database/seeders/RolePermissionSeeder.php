@@ -40,5 +40,8 @@ class RolePermissionSeeder extends Seeder
 
         $superAdminRole = Role::findByName('Super Admin');
         $superAdminRole->givePermissionTo(Permission::all());
+
+        $role = Role::findByName('KL');
+        $role->givePermissionTo('kejadian-bencana.manage');
     }
 }

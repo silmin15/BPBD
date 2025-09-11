@@ -6,25 +6,28 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 
 // ===================== ADMIN AREA =====================
+use App\Http\Controllers\Role\KL\KLController;
+use App\Http\Controllers\Role\PK\PKController;
+use App\Http\Controllers\Role\RR\RRController;
+use App\Http\Controllers\Role\KL\LogistikController;
+use App\Http\Controllers\Role\KL\JenisBencanaController;
+use App\Http\Controllers\Role\Shared\ActivityReportController;
+
+// ===================== ROLE =====================
+use App\Http\Controllers\Role\KL\SkController         as KlSkController;
+use App\Http\Controllers\Role\PK\SkController         as PkSkController;
+
+use App\Http\Controllers\Role\RR\SkController         as RrSkController;
 use App\Http\Controllers\Role\Admin\DashboardController as AdminDashboard;
-use App\Http\Controllers\Role\Admin\UserController      as AdminUserController;
-use App\Http\Controllers\Role\Admin\ReportController    as AdminReportController;
 use App\Http\Controllers\Role\Admin\RekapLogistikController as AdminRekap;
 use App\Http\Controllers\Role\Admin\SkController        as AdminSkController;
 
-// ===================== ROLE =====================
-use App\Http\Controllers\Role\PK\PKController;
-use App\Http\Controllers\Role\PK\SkController         as PkSkController;
-
-use App\Http\Controllers\Role\KL\KLController;
-use App\Http\Controllers\Role\KL\LogistikController;
-use App\Http\Controllers\Role\KL\SkController         as KlSkController;
-
-use App\Http\Controllers\Role\RR\RRController;
-use App\Http\Controllers\Role\RR\SkController         as RrSkController;
+use App\Http\Controllers\Role\Admin\UserController      as AdminUserController;
+use App\Http\Controllers\Role\Admin\ReportController    as AdminReportController;
 
 // ===================== SHARED (lintas role) =====================
-use App\Http\Controllers\Role\Shared\ActivityReportController;
+use App\Http\Controllers\Role\KL\KejadianBencanaController as KlKejadianBencanaController;
+use App\Http\Controllers\Role\Admin\KejadianBencanaController as AdminKejadianBencanaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -166,6 +169,14 @@ Route::middleware(['auth', 'verified', 'role:KL'])
             Route::put('/{item}',        [LogistikController::class, 'update'])->name('update');
             Route::delete('/{item}',     [LogistikController::class, 'destroy'])->name('destroy');
         });
+
+        // Kejadian Bencana
+        Route::resource('kejadian-bencana', KlKejadianBencanaController::class);
+        Route::get('kejadian-bencana-import', [KlKejadianBencanaController::class, 'importForm'])->name('kejadian-bencana.import.form');
+        Route::post('kejadian-bencana-import', [KlKejadianBencanaController::class, 'importStore'])->name('kejadian-bencana.import.store');
+        Route::resource('jenis-bencana', JenisBencanaController::class);
+
+
 
         // === SK (KL) ===
         Route::prefix('sk')->name('sk.')->group(function () {
