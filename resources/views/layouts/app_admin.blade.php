@@ -4,6 +4,8 @@
 <head>
     @vite(['resources/js/app_admin.js'])
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    @stack('styles')
+
 </head>
 
 <body data-scope="admin" data-page="{{ 'role/admin/' . str_replace('.', '/', request()->route()->getName()) }}"
@@ -25,24 +27,24 @@
         {{-- ===== PAGE HEADER ===== --}}
         <header class="tw-px-4 sm:tw-px-6 lg:tw-px-8 tw-pt-4">
             @hasSection('page_title')
-                <div class="tw-flex tw-items-center tw-justify-between tw-gap-3 tw-flex-wrap">
-                    <div>
-                        <h1 class="tw-flex tw-items-center tw-gap-2 tw-text-xl tw-font-semibold tw-text-slate-800">
-                            @yield('page_icon')
-                            @yield('page_title')
-                        </h1>
-                        @hasSection('page_breadcrumb')
-                            <ol class="breadcrumb tw-text-sm tw-text-slate-500 tw-mt-1">
-                                <li class="breadcrumb-item active">
-                                    @yield('page_breadcrumb')
-                                </li>
-                            </ol>
-                        @endif
-                    </div>
-                    <div class="tw-flex tw-items-center tw-gap-2">
-                        @yield('page_actions')
-                    </div>
+            <div class="tw-flex tw-items-center tw-justify-between tw-gap-3 tw-flex-wrap">
+                <div>
+                    <h1 class="tw-flex tw-items-center tw-gap-2 tw-text-xl tw-font-semibold tw-text-slate-800">
+                        @yield('page_icon')
+                        @yield('page_title')
+                    </h1>
+                    @hasSection('page_breadcrumb')
+                    <ol class="breadcrumb tw-text-sm tw-text-slate-500 tw-mt-1">
+                        <li class="breadcrumb-item active">
+                            @yield('page_breadcrumb')
+                        </li>
+                    </ol>
+                    @endif
                 </div>
+                <div class="tw-flex tw-items-center tw-gap-2">
+                    @yield('page_actions')
+                </div>
+            </div>
             @endif
         </header>
 
@@ -51,6 +53,8 @@
             @yield('content')
         </main>
     </div>
+    @stack('scripts')
+
 </body>
 
 </html>
