@@ -13,10 +13,73 @@
 
         <div class="collapse navbar-collapse" id="navPublik">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
-                <li class="nav-item"><a class="nav-link text-white" href="<?php echo e(route('peta.publik')); ?>">Peta Bencana</a>
+
+                
+                <?php $homeActive = Route::has('home.publik') ? request()->routeIs('home.publik') : url()->current() === url('/'); ?>
+                <li class="nav-item">
+                    <?php if(Route::has('home.publik')): ?>
+                        <a class="nav-link <?php echo e($homeActive ? 'active fw-semibold' : 'text-white'); ?>"
+                            href="<?php echo e(route('home.publik')); ?>">
+                            Home
+                        </a>
+                    <?php else: ?>
+                        
+                        <a class="nav-link text-white" href="<?php echo e(url('/')); ?>">Home</a>
+                    <?php endif; ?>
                 </li>
-                <li class="nav-item"><a class="nav-link text-white" href="<?php echo e(route('grafik.publik')); ?>">Grafik</a></li>
-                <li class="nav-item"><a class="nav-link text-white" href="#">Dokumentasi</a></li>
+
+                
+                <li class="nav-item">
+                    <a class="nav-link <?php echo e(request()->routeIs('peta.publik') ? 'active fw-semibold' : 'text-white'); ?>"
+                        href="<?php echo e(route('peta.publik')); ?>">
+                        Peta Bencana
+                    </a>
+                </li>
+
+                
+                <li class="nav-item">
+                    <a class="nav-link <?php echo e(request()->routeIs('grafik.publik') ? 'active fw-semibold' : 'text-white'); ?>"
+                        href="<?php echo e(route('grafik.publik')); ?>">
+                        Grafik
+                    </a>
+                </li>
+
+                
+                <?php $sopActive = request()->routeIs('sop.publik.*'); ?>
+                <li class="nav-item">
+                    <?php if(Route::has('sop.publik.index')): ?>
+                        <a class="nav-link <?php echo e($sopActive ? 'active fw-semibold' : 'text-white'); ?>"
+                            href="<?php echo e(route('sop.publik.index')); ?>">
+                            SOP Kebencanaan
+                        </a>
+                    <?php else: ?>
+                        
+                        <a class="nav-link text-white" href="<?php echo e(url('/sop-kebencanaan')); ?>">
+                            SOP Kebencanaan
+                        </a>
+                    <?php endif; ?>
+                </li>
+
+                
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="#">Dokumentasi</a>
+                </li>
+                
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-white" href="#" id="layananDrop" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        Layanan Masyarakat
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="layananDrop">
+                        <li>
+                            <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#bastModal">
+                                <i class="bi bi-clipboard2-check me-2"></i>
+                                BAST (Peminjaman Alat)
+                            </a>
+                        </li>
+                        
+                    </ul>
+                </li>
 
                 
                 <li class="nav-item ms-lg-3">

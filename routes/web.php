@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
 use App\Http\Controllers\ProfileController;
 
@@ -15,6 +16,7 @@ use App\Http\Controllers\Role\Admin\SkController        as AdminSkController;
 // ===================== ROLE =====================
 use App\Http\Controllers\Role\PK\PKController;
 use App\Http\Controllers\Role\PK\SkController         as PkSkController;
+use App\Http\Controllers\Role\PK\BastController as PkBastController;
 
 use App\Http\Controllers\Role\KL\KLController;
 use App\Http\Controllers\Role\KL\LogistikController;
@@ -25,16 +27,37 @@ use App\Http\Controllers\Role\RR\SkController         as RrSkController;
 
 // ===================== SHARED (lintas role) =====================
 use App\Http\Controllers\Role\Shared\ActivityReportController;
+use App\Http\Controllers\Role\Shared\SopController as SopShared;
 
+use App\Http\Controllers\Public\HomeController as PublicHome;
+use App\Http\Controllers\Public\BastPublicController;
 /*
 |--------------------------------------------------------------------------
 | Publik
 |--------------------------------------------------------------------------
 */
 
-Route::view('/',       'pages.publik.peta')->name('peta.publik');
+Route::get('/', [PublicHome::class, 'index'])->name('home.publik');
+Route::view('/peta',       'pages.publik.peta')->name('peta.publik');
 Route::view('/grafik', 'pages.publik.grafik')->name('grafik.publik');
 
+Route::get('/sop-kebencanaan',                [SopShared::class, 'publicIndex'])->name('sop.publik.index');
+Route::get('/sop-kebencanaan/{sop}/download', [SopShared::class, 'downloadPublic'])
+    ->whereNumber('sop')->name('sop.publik.download');
+Route::get('/bast',  [BastPublicController::class, 'create'])->name('bast.publik.create');
+Route::post('/bast', [BastPublicController::class, 'store'])->name('bast.publik.store');
+Route::get('/geo/banjarnegara/desa', function (Request $r) {
+    $key  = mb_strtolower(trim((string) $r->query('kecamatan', '')));
+    $map  = config('banjarnegara.desa_by_kecamatan', []);
+    $norm = [];
+    foreach ($map as $k => $desa) {
+        $norm[mb_strtolower(trim($k))] = array_values($desa);
+    }
+    return response()->json([
+        'kecamatan' => $key,
+        'desa'      => $norm[$key] ?? [],
+    ]);
+})->name('geo.banjarnegara.desa');
 /*
 |--------------------------------------------------------------------------
 | Auth + Verified (Umum)
@@ -110,6 +133,18 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'verified', 'role:Su
         Route::get('/rekap/{year?}',    [AdminSkController::class, 'rekap'])->whereNumber('year')->name('rekap');
         Route::get('/rekap/{year}/pdf', [AdminSkController::class, 'rekapPdf'])->whereNumber('year')->name('rekap.pdf');
     });
+    // === SOP Kebencanaan (Admin melihat SEMUA role) ===
+    Route::prefix('sop')->name('sop.')->group(function () {
+        Route::get('/',               [SopShared::class, 'adminIndex'])->name('index');
+        Route::get('/create',         [SopShared::class, 'create'])->name('create');
+        Route::post('/',              [SopShared::class, 'store'])->name('store');
+        Route::get('/{sop}/edit',     [SopShared::class, 'edit'])->whereNumber('sop')->name('edit');
+        Route::put('/{sop}',          [SopShared::class, 'update'])->whereNumber('sop')->name('update');
+        Route::delete('/{sop}',       [SopShared::class, 'destroy'])->whereNumber('sop')->name('destroy');
+
+        Route::get('/{sop}/download', [SopShared::class, 'downloadAdmin'])->whereNumber('sop')->name('download');
+        Route::post('/{sop}/toggle',  [SopShared::class, 'togglePublish'])->whereNumber('sop')->name('toggle');
+    });
 });
 
 /*
@@ -139,6 +174,29 @@ Route::middleware(['auth', 'verified', 'role:PK'])
 
             Route::get('/rekap/{year?}',    [PkSkController::class, 'rekap'])->whereNumber('year')->name('rekap');
             Route::get('/rekap/{year}/pdf', [PkSkController::class, 'rekapPdf'])->whereNumber('year')->name('rekap.pdf');
+        });
+        // === SOP Kebencanaan (PK) ===
+        Route::prefix('sop')->name('sop.')->group(function () {
+            Route::get('/',               [SopShared::class, 'adminIndex'])->name('index');   // otomatis terfilter role PK via Policy/Scope
+            Route::get('/create',         [SopShared::class, 'create'])->name('create');
+            Route::post('/',              [SopShared::class, 'store'])->name('store');
+            Route::get('/{sop}/edit',     [SopShared::class, 'edit'])->whereNumber('sop')->name('edit');
+            Route::put('/{sop}',          [SopShared::class, 'update'])->whereNumber('sop')->name('update');
+            Route::delete('/{sop}',       [SopShared::class, 'destroy'])->whereNumber('sop')->name('destroy');
+
+            Route::get('/{sop}/download', [SopShared::class, 'downloadAdmin'])->whereNumber('sop')->name('download');
+            Route::post('/{sop}/toggle',  [SopShared::class, 'togglePublish'])->whereNumber('sop')->name('toggle');
+        });
+
+        Route::prefix('bast')->name('bast.')->group(function () {
+            Route::get('/',             [PkBastController::class, 'index'])->name('index');
+            Route::get('/{bast}',       [PkBastController::class, 'show'])->name('show');
+            Route::delete('/{bast}',    [PkBastController::class, 'destroy'])->name('destroy');
+
+            // CETAK (menandai printed & approved, lalu tampilkan halaman siap print)
+            Route::get('/{bast}/print', [PkBastController::class, 'print'])->name('print');
+            // Unduh surat pengantar
+            Route::get('/{bast}/surat', [PkBastController::class, 'downloadSurat'])->name('surat');
         });
     });
 
@@ -180,6 +238,18 @@ Route::middleware(['auth', 'verified', 'role:KL'])
             Route::get('/rekap/{year?}',    [KlSkController::class, 'rekap'])->whereNumber('year')->name('rekap');
             Route::get('/rekap/{year}/pdf', [KlSkController::class, 'rekapPdf'])->whereNumber('year')->name('rekap.pdf');
         });
+        // === SOP Kebencanaan (KL) ===
+        Route::prefix('sop')->name('sop.')->group(function () {
+            Route::get('/',               [SopShared::class, 'adminIndex'])->name('index');   // otomatis terfilter role KL
+            Route::get('/create',         [SopShared::class, 'create'])->name('create');
+            Route::post('/',              [SopShared::class, 'store'])->name('store');
+            Route::get('/{sop}/edit',     [SopShared::class, 'edit'])->whereNumber('sop')->name('edit');
+            Route::put('/{sop}',          [SopShared::class, 'update'])->whereNumber('sop')->name('update');
+            Route::delete('/{sop}',       [SopShared::class, 'destroy'])->whereNumber('sop')->name('destroy');
+
+            Route::get('/{sop}/download', [SopShared::class, 'downloadAdmin'])->whereNumber('sop')->name('download');
+            Route::post('/{sop}/toggle',  [SopShared::class, 'togglePublish'])->whereNumber('sop')->name('toggle');
+        });
     });
 
 /*
@@ -209,6 +279,18 @@ Route::middleware(['auth', 'verified', 'role:RR'])
 
             Route::get('/rekap/{year?}',    [RrSkController::class, 'rekap'])->whereNumber('year')->name('rekap');
             Route::get('/rekap/{year}/pdf', [RrSkController::class, 'rekapPdf'])->whereNumber('year')->name('rekap.pdf');
+        });
+        // === SOP Kebencanaan (RR) ===
+        Route::prefix('sop')->name('sop.')->group(function () {
+            Route::get('/',               [SopShared::class, 'adminIndex'])->name('index');   // otomatis terfilter role RR
+            Route::get('/create',         [SopShared::class, 'create'])->name('create');
+            Route::post('/',              [SopShared::class, 'store'])->name('store');
+            Route::get('/{sop}/edit',     [SopShared::class, 'edit'])->whereNumber('sop')->name('edit');
+            Route::put('/{sop}',          [SopShared::class, 'update'])->whereNumber('sop')->name('update');
+            Route::delete('/{sop}',       [SopShared::class, 'destroy'])->whereNumber('sop')->name('destroy');
+
+            Route::get('/{sop}/download', [SopShared::class, 'downloadAdmin'])->whereNumber('sop')->name('download');
+            Route::post('/{sop}/toggle',  [SopShared::class, 'togglePublish'])->whereNumber('sop')->name('toggle');
         });
     });
 

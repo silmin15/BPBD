@@ -36,34 +36,38 @@
 
         
         <?php if (\Illuminate\Support\Facades\Blade::check('role', 'Super Admin')): ?>
-            
             <a href="<?php echo e(route('admin.dashboard')); ?>"
                 class="sidebar-link <?php echo e(request()->routeIs('admin.dashboard') ? 'active' : ''); ?>">
                 <i class="bi bi-house-door-fill me-2"></i> Dashboard
             </a>
-            
+
             <?php if(Route::has('admin.rekap-kegiatan.rekap')): ?>
                 <a href="<?php echo e(route('admin.rekap-kegiatan.rekap')); ?>"
                     class="sidebar-link <?php echo e(request()->routeIs('admin.rekap-kegiatan.*') ? 'active' : ''); ?>">
                     <i class="bi bi-clipboard2-data-fill me-2"></i> Laporan
                 </a>
             <?php endif; ?>
-            
+
             <a href="<?php echo e(route('admin.logistik.rekap', now()->year)); ?>"
                 class="sidebar-link <?php echo e(request()->routeIs('admin.logistik.*') ? 'active' : ''); ?>">
                 <i class="bi bi-clipboard2-data"></i> Rekap Logistik
             </a>
-            
+
             <a href="<?php echo e(route('admin.manajemen-user.index')); ?>"
                 class="sidebar-link <?php echo e(request()->routeIs('admin.manajemen-user.*') ? 'active' : ''); ?>">
                 <i class="bi bi-people-fill me-2"></i> Manajemen User
             </a>
+
             <a href="<?php echo e(route('admin.sk.index')); ?>"
                 class="sidebar-link <?php echo e(request()->routeIs('admin.sk.*') ? 'active' : ''); ?>">
                 <i class="bi bi-journal-text me-2"></i> Data & Rekap SK
             </a>
 
-
+            
+            <a href="<?php echo e(route('admin.sop.index')); ?>"
+                class="sidebar-link <?php echo e(request()->routeIs('admin.sop.*') ? 'active' : ''); ?>">
+                <i class="bi bi-life-preserver me-2"></i> SOP Kebencanaan
+            </a>
         <?php endif; ?>
 
         
@@ -77,8 +81,20 @@
                 class="sidebar-link <?php echo e(request()->routeIs('pk.lap-kegiatan.*') ? 'active' : ''); ?>">
                 <i class="bi bi-file-text-fill me-2"></i> Input Kegiatan
             </a>
+
             <a href="<?php echo e(route('pk.sk.index')); ?>" class="sidebar-link <?php echo e(request()->routeIs('pk.sk.*') ? 'active' : ''); ?>">
                 <i class="bi bi-journal-text me-2"></i> Data & Rekap SK
+            </a>
+
+            
+            <a href="<?php echo e(route('pk.sop.index')); ?>"
+                class="sidebar-link <?php echo e(request()->routeIs('pk.sop.*') ? 'active' : ''); ?>">
+                <i class="bi bi-life-preserver me-2"></i> SOP Kebencanaan
+            </a>
+            
+            <a href="<?php echo e(route('pk.bast.index')); ?>"
+                class="sidebar-link <?php echo e(request()->routeIs('pk.bast.*') ? 'active' : ''); ?>">
+                <i class="bi bi-file-earmark-text me-2"></i> BAST
             </a>
         <?php endif; ?>
 
@@ -97,18 +113,21 @@
             <?php
                 $logistikIndexRoute = Route::has('kl.logistik.index') ? 'kl.logistik.index' : null;
                 $isLogistikActive = request()->routeIs('kl.logistik.*');
-
-                $thisYear = now()->year;
-                $years = range($thisYear, $thisYear - 5);
             ?>
-
             <?php if($logistikIndexRoute): ?>
                 <a href="<?php echo e(route($logistikIndexRoute)); ?>" class="sidebar-link <?php echo e($isLogistikActive ? 'active' : ''); ?>">
                     <i class="bi bi-box-seam-fill me-2"></i> Input Logistik
                 </a>
             <?php endif; ?>
-            <a href="<?php echo e(route('kl.sk.index')); ?>" class="sidebar-link <?php echo e(request()->routeIs('rr.sk.*') ? 'active' : ''); ?>">
+
+            <a href="<?php echo e(route('kl.sk.index')); ?>" class="sidebar-link <?php echo e(request()->routeIs('kl.sk.*') ? 'active' : ''); ?>">
                 <i class="bi bi-journal-text me-2"></i> Data & Rekap SK
+            </a>
+
+            
+            <a href="<?php echo e(route('kl.sop.index')); ?>"
+                class="sidebar-link <?php echo e(request()->routeIs('kl.sop.*') ? 'active' : ''); ?>">
+                <i class="bi bi-life-preserver me-2"></i> SOP Kebencanaan
             </a>
         <?php endif; ?>
 
@@ -123,8 +142,15 @@
                 class="sidebar-link <?php echo e(request()->routeIs('rr.lap-kegiatan.*') ? 'active' : ''); ?>">
                 <i class="bi bi-file-text-fill me-2"></i> Input Kegiatan
             </a>
+
             <a href="<?php echo e(route('rr.sk.index')); ?>" class="sidebar-link <?php echo e(request()->routeIs('rr.sk.*') ? 'active' : ''); ?>">
                 <i class="bi bi-journal-text me-2"></i> Data & Rekap SK
+            </a>
+
+            
+            <a href="<?php echo e(route('rr.sop.index')); ?>"
+                class="sidebar-link <?php echo e(request()->routeIs('rr.sop.*') ? 'active' : ''); ?>">
+                <i class="bi bi-life-preserver me-2"></i> SOP Kebencanaan
             </a>
         <?php endif; ?>
 

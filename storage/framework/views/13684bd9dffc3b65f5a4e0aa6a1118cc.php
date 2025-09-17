@@ -2,36 +2,97 @@
 
 
 <?php $__env->startSection('page_title', 'Manajemen User'); ?>
-<?php $__env->startSection('page_icon'); ?>
-    <i class="bi bi-people-fill"></i>
-<?php $__env->stopSection(); ?>
+<?php $__env->startSection('page_icon'); ?> <i class="bi bi-people-fill"></i> <?php $__env->stopSection(); ?>
 
 
 <?php $__env->startSection('page_actions'); ?>
-    <button type="button" class="btn-orange inline-flex items-center gap-2" data-bs-toggle="modal"
+    <button type="button" class="btn btn-success d-inline-flex align-items-center gap-2" data-bs-toggle="modal"
         data-bs-target="#createUserModal" aria-label="Buat user baru">
-        <i class="bi bi-plus-lg"></i>
-        <span>Buat User</span>
+        <i class="bi bi-plus-lg"></i><span>Buat User</span>
     </button>
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startSection('content'); ?>
-
     
     <?php if(session('success')): ?>
-        <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+        <div class="alert alert-success alert-dismissible fade show mb-3" role="alert">
             <?php echo e(session('success')); ?>
 
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     <?php endif; ?>
     <?php if(session('error')): ?>
-        <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+        <div class="alert alert-danger alert-dismissible fade show mb-3" role="alert">
             <?php echo e(session('error')); ?>
 
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         </div>
     <?php endif; ?>
+
+    
+    <div class="card shadow-sm">
+
+        
+        
+
+        
+        <div class="table-responsive">
+            <table class="table table-hover table-striped align-middle mb-0">
+                <thead class="table-light sticky-top">
+                    <tr>
+                        <th style="width:72px" class="text-center">#</th>
+                        <th>Nama</th>
+                        <th>Email</th>
+                        <th style="width:220px">Role</th>
+                        <th style="width:220px" class="text-end">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php $__empty_1 = true; $__currentLoopData = $users; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $i => $u): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
+                        <tr>
+                            <td class="text-center"><?php echo e($users->firstItem() + $i); ?></td>
+                            <td class="fw-semibold"><?php echo e($u->name); ?></td>
+                            <td><?php echo e($u->email); ?></td>
+                            <td>
+                                <?php $rolesText = $u->getRoleNames()->join(', '); ?>
+                                <span class="badge text-bg-primary-subtle text-primary"><?php echo e($rolesText ?: '—'); ?></span>
+                            </td>
+                            <td class="text-end">
+                                <a href="<?php echo e(route('admin.manajemen-user.edit', $u)); ?>"
+                                    class="btn btn-sm btn-outline-primary">
+                                    <i class="bi bi-pencil"></i> Edit
+                                </a>
+
+                                <form action="<?php echo e(route('admin.manajemen-user.destroy', $u)); ?>" method="POST"
+                                    class="d-inline" onsubmit="return confirm('Hapus user ini?')">
+                                    <?php echo csrf_field(); ?> <?php echo method_field('DELETE'); ?>
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                                        <i class="bi bi-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
+                        <tr>
+                            <td colspan="5" class="text-center text-muted py-4">Belum ada user.</td>
+                        </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+
+        
+        <div class="card-footer bg-white d-flex flex-column flex-md-row justify-content-between align-items-center">
+            <?php $total = method_exists($users, 'total') ? $users->total() : $users->count(); ?>
+            <small class="text-muted mb-2 mb-md-0">
+                Menampilkan <?php echo e($users->count() ? $users->firstItem() . '–' . $users->lastItem() : 0); ?> dari <?php echo e($total); ?>
+
+                data
+            </small>
+            <?php echo e($users->withQueryString()->onEachSide(1)->links()); ?>
+
+        </div>
+    </div>
 
     
     <div class="modal fade" id="createUserModal" tabindex="-1" aria-labelledby="createUserModalLabel" aria-hidden="true">
@@ -148,7 +209,8 @@ if (isset($__messageOriginal)) { $message = $__messageOriginal; }
 endif;
 unset($__errorArgs, $__bag); ?>"
                                     required>
-                                    <option value="" disabled <?php echo e(old('role') ? '' : 'selected'); ?>>Pilih role</option>
+                                    <option value="" disabled <?php echo e(old('role') ? '' : 'selected'); ?>>Pilih role
+                                    </option>
                                     <?php $__currentLoopData = $roles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $id => $name): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                         <?php if(in_array($name, ['PK', 'KL', 'RR', 'Staf BPBD'])): ?>
                                             <option value="<?php echo e($name); ?>" <?php if(old('role') === $name): echo 'selected'; endif; ?>>
@@ -159,6 +221,7 @@ unset($__errorArgs, $__bag); ?>"
                             </div>
                         </div>
                     </div>
+
                     <div class="modal-footer">
                         <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
                         <button type="submit" class="btn btn-primary">Simpan</button>
@@ -173,60 +236,16 @@ unset($__errorArgs, $__bag); ?>"
         <script>
             document.addEventListener('DOMContentLoaded', () => {
                 const el = document.getElementById('createUserModal');
-                if (el) {
-                    const modal = new bootstrap.Modal(el);
-                    modal.show();
-                    setTimeout(() => {
-                        const firstInvalid = el.querySelector('.is-invalid');
-                        if (firstInvalid) firstInvalid.focus();
-                    }, 300);
-                }
+                if (!el) return;
+                const modal = new bootstrap.Modal(el);
+                modal.show();
+                setTimeout(() => {
+                    const firstInvalid = el.querySelector('.is-invalid');
+                    if (firstInvalid) firstInvalid.focus();
+                }, 300);
             });
         </script>
     <?php endif; ?>
-
-    <div class="table-card overflow-x-auto mt-4">
-        <table class="bpbd-table min-w-full">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Nama</th>
-                    <th>Email</th>
-                    <th>Role</th>
-                    <th class="col-aksi">Aksi</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php $__empty_1 = true; $__currentLoopData = $users; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $u): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                    <tr>
-                        <td><?php echo e($users->firstItem() + $loop->index); ?></td>
-                        <td class="font-semibold"><?php echo e($u->name); ?></td>
-                        <td><?php echo e($u->email); ?></td>
-                        <td><?php echo e($u->getRoleNames()->join(', ')); ?></td>
-                        <td class="col-aksi">
-                            <a href="<?php echo e(route('admin.manajemen-user.edit', $u)); ?>" class="btn-edit">Edit</a>
-                            <form action="<?php echo e(route('admin.manajemen-user.destroy', $u)); ?>" method="POST" class="d-inline"
-                                onsubmit="return confirm('Hapus user?')">
-                                <?php echo csrf_field(); ?> <?php echo method_field('DELETE'); ?>
-                                <button type="submit" class="btn-delete">Hapus</button>
-                            </form>
-                        </td>
-                    </tr>
-                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-                    <tr>
-                        <td colspan="5" class="text-center text-slate-500 py-6">Belum ada user</td>
-                    </tr>
-                <?php endif; ?>
-            </tbody>
-        </table>
-    </div>
-
-
-    <div class="mt-4">
-        <?php echo e($users->withQueryString()->links()); ?>
-
-    </div>
-
 <?php $__env->stopSection(); ?>
 
 <?php echo $__env->make('layouts.app_admin', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\laragon\www\BPBD\resources\views/role/admin/manajemen-user/index.blade.php ENDPATH**/ ?>

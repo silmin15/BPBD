@@ -18,7 +18,7 @@
 <body class="d-flex flex-column min-vh-100">
     {{-- Navbar publik --}}
     @include('layouts.partials.navigation_publik')
-
+    @include('pages.publik.bast-modal')
     <main class="flex-grow-1">
         @yield('content')
     </main>

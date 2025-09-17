@@ -18,7 +18,7 @@
 <body class="d-flex flex-column min-vh-100">
     
     <?php echo $__env->make('layouts.partials.navigation_publik', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
-
+    <?php echo $__env->make('pages.publik.bast-modal', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
     <main class="flex-grow-1">
         <?php echo $__env->yieldContent('content'); ?>
     </main>
