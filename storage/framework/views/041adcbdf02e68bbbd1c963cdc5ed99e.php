@@ -4,6 +4,8 @@
 <head>
     <?php echo app('Illuminate\Foundation\Vite')(['resources/js/app_admin.js']); ?>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <?php echo $__env->yieldPushContent('styles'); ?>
+
 </head>
 
 <body data-scope="admin" data-page="<?php echo e('role/admin/' . str_replace('.', '/', request()->route()->getName())); ?>"
@@ -25,24 +27,24 @@
         
         <header class="tw-px-4 sm:tw-px-6 lg:tw-px-8 tw-pt-4">
             <?php if (! empty(trim($__env->yieldContent('page_title')))): ?>
-                <div class="tw-flex tw-items-center tw-justify-between tw-gap-3 tw-flex-wrap">
-                    <div>
-                        <h1 class="tw-flex tw-items-center tw-gap-2 tw-text-xl tw-font-semibold tw-text-slate-800">
-                            <?php echo $__env->yieldContent('page_icon'); ?>
-                            <?php echo $__env->yieldContent('page_title'); ?>
-                        </h1>
-                        <?php if (! empty(trim($__env->yieldContent('page_breadcrumb')))): ?>
-                            <ol class="breadcrumb tw-text-sm tw-text-slate-500 tw-mt-1">
-                                <li class="breadcrumb-item active">
-                                    <?php echo $__env->yieldContent('page_breadcrumb'); ?>
-                                </li>
-                            </ol>
-                        <?php endif; ?>
-                    </div>
-                    <div class="tw-flex tw-items-center tw-gap-2">
-                        <?php echo $__env->yieldContent('page_actions'); ?>
-                    </div>
+            <div class="tw-flex tw-items-center tw-justify-between tw-gap-3 tw-flex-wrap">
+                <div>
+                    <h1 class="tw-flex tw-items-center tw-gap-2 tw-text-xl tw-font-semibold tw-text-slate-800">
+                        <?php echo $__env->yieldContent('page_icon'); ?>
+                        <?php echo $__env->yieldContent('page_title'); ?>
+                    </h1>
+                    <?php if (! empty(trim($__env->yieldContent('page_breadcrumb')))): ?>
+                    <ol class="breadcrumb tw-text-sm tw-text-slate-500 tw-mt-1">
+                        <li class="breadcrumb-item active">
+                            <?php echo $__env->yieldContent('page_breadcrumb'); ?>
+                        </li>
+                    </ol>
+                    <?php endif; ?>
                 </div>
+                <div class="tw-flex tw-items-center tw-gap-2">
+                    <?php echo $__env->yieldContent('page_actions'); ?>
+                </div>
+            </div>
             <?php endif; ?>
         </header>
 
@@ -51,7 +53,8 @@
             <?php echo $__env->yieldContent('content'); ?>
         </main>
     </div>
+    <?php echo $__env->yieldPushContent('scripts'); ?>
+
 </body>
 
-</html>
-<?php /**PATH C:\laragon\www\BPBD\resources\views/layouts/app_admin.blade.php ENDPATH**/ ?>
+</html><?php /**PATH C:\laragon\www\BPBD\resources\views/layouts/app_admin.blade.php ENDPATH**/ ?>
