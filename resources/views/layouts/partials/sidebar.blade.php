@@ -82,7 +82,7 @@ $dashUrl = route('rr.dashboard');
         </a>
         @endrole
 
-        {{-- ====== KL ====== --}}
+        {{-- ====== KL ===== --}}
         @role('KL')
         <a href="{{ route('kl.dashboard') }}"
             class="sidebar-link {{ request()->routeIs('kl.dashboard') ? 'active' : '' }}">
@@ -112,7 +112,7 @@ $dashUrl = route('rr.dashboard');
         </a>
 
         @php
-            $isBencanaGroupActive = request()->routeIs('kl.kejadian-bencana.*') || request()->routeIs('kl.jenis-bencana.*');
+        $isBencanaGroupActive = request()->routeIs('kl.kejadian-bencana.*') || request()->routeIs('kl.jenis-bencana.*');
         @endphp
         <details class="sidebar-group" @if($isBencanaGroupActive) open @endif>
             <summary class="sidebar-link d-flex align-items-center">
