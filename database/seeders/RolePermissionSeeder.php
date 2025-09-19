@@ -19,22 +19,25 @@ class RolePermissionSeeder extends Seeder
 
 
         // ini masih contoh permission let
-        permission::create(['name' => 'view dashboard']);
-        Permission::create(['name' => 'view inventaris']);
-        Permission::create(['name' => 'pinjam inventaris']);
-        Permission::create(['name' => 'kembalikan inventaris']);
+        Permission::firstOrCreate(['name' => 'view dashboard']);
+        Permission::firstOrCreate(['name' => 'view inventaris']);
+        Permission::firstOrCreate(['name' => 'pinjam inventaris']);
+        Permission::firstOrCreate(['name' => 'kembalikan inventaris']);
+        Permission::firstOrCreate(['name' => 'kejadian-bencana.manage']);
 
 
 
 
-        Role::create(['name' => 'Super Admin']);
-        Role::create(['name' => 'Sekertariat']);
-        Role::create(['name' => 'PK']);
-        Role::create(['name' => 'KL']);
-        Role::create(['name' => 'RR']);
-        Role::create(['name' => 'Petugas Aset K']);
-        Role::create(['name' => 'Petugas Aset B']);
-        Role::create(['name' => 'Staf BPBD'])->givePermissionTo('view dashboard', 'view inventaris', 'pinjam inventaris', 'kembalikan inventaris');
+        Role::firstOrCreate(['name' => 'Super Admin']);
+        Role::firstOrCreate(['name' => 'Sekertariat']);
+        Role::firstOrCreate(['name' => 'PK']);
+        Role::firstOrCreate(['name' => 'KL']);
+        Role::firstOrCreate(['name' => 'RR']);
+        Role::firstOrCreate(['name' => 'Petugas Aset K']);
+        Role::firstOrCreate(['name' => 'Petugas Aset B']);
+        
+        $stafRole = Role::firstOrCreate(['name' => 'Staf BPBD']);
+        $stafRole->givePermissionTo('view dashboard', 'view inventaris', 'pinjam inventaris', 'kembalikan inventaris');
 
 
 

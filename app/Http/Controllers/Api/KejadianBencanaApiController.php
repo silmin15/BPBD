@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
-use App\Models\KejadianBencana;
+use Storage;
 use App\Models\JenisBencana;
 use Illuminate\Http\Request;
+use App\Models\KejadianBencana;
+use App\Http\Controllers\Controller;
 
 class KejadianBencanaApiController extends Controller
 {
@@ -56,8 +57,19 @@ class KejadianBencanaApiController extends Controller
                 $parts = array_map('trim', explode(',', $bbox));
                 if (count($parts) === 4) {
                     [$minLng, $minLat, $maxLng, $maxLat] = array_map('floatval', $parts);
-                    $wkt = sprintf('POLYGON((%f %f,%f %f,%f %f,%f %f,%f %f))',
-                        $minLng, $minLat, $maxLng, $minLat, $maxLng, $maxLat, $minLng, $maxLat, $minLng, $minLat);
+                    $wkt = sprintf(
+                        'POLYGON((%f %f,%f %f,%f %f,%f %f,%f %f))',
+                        $minLng,
+                        $minLat,
+                        $maxLng,
+                        $minLat,
+                        $maxLng,
+                        $maxLat,
+                        $minLng,
+                        $maxLat,
+                        $minLng,
+                        $minLat
+                    );
                     $query->whereRaw('geom && ST_GeomFromText(?, 4326)', [$wkt]);
                 }
             }
@@ -90,7 +102,7 @@ class KejadianBencanaApiController extends Controller
                 'keterangan' => $kejadian->keterangan,
                 'geofile' => $kejadian->geofile_path ? [
                     'name' => $kejadian->geofile_name,
-                    'url'  => \Storage::url($kejadian->geofile_path),
+                    'url'  => Storage::url($kejadian->geofile_path),
                 ] : null,
                 'geometry' => (config('database.default') === 'pgsql' && $kejadian->geom)
                     ? json_decode(\DB::selectOne('SELECT ST_AsGeoJSON(geom) as g FROM kejadian_bencanas WHERE id = ?', [$kejadian->id])->g, true)
@@ -142,6 +154,105 @@ class KejadianBencanaApiController extends Controller
         return response()->json([
             'status' => 'success',
             'data' => $kecamatans,
+        ]);
+    }
+
+    /**
+     * Get statistics overview
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function statistics()
+    {
+        $totalKejadian = KejadianBencana::count();
+        $jenisBencanaUnik = JenisBencana::count();
+        $kecamatanTerdampak = KejadianBencana::distinct('kecamatan')->count();
+        $tahunTerakhir = KejadianBencana::max('tanggal_kejadian') ?
+            \Carbon\Carbon::parse(KejadianBencana::max('tanggal_kejadian'))->year :
+            now()->year;
+
+        return response()->json([
+            'status' => 'success',
+            'data' => [
+                'total_kejadian' => $totalKejadian,
+                'jenis_bencana_unik' => $jenisBencanaUnik,
+                'kecamatan_terdampak' => $kecamatanTerdampak,
+                'tahun_terakhir' => $tahunTerakhir,
+            ],
+        ]);
+    }
+
+    /**
+     * Get yearly statistics
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function statisticsYearly()
+    {
+        $yearlyData = KejadianBencana::selectRaw('YEAR(tanggal_kejadian) as tahun, COUNT(*) as jumlah')
+            ->groupBy('tahun')
+            ->orderBy('tahun')
+            ->get();
+
+        $labels = $yearlyData->pluck('tahun')->toArray();
+        $values = $yearlyData->pluck('jumlah')->toArray();
+
+        return response()->json([
+            'status' => 'success',
+            'data' => [
+                'labels' => $labels,
+                'values' => $values,
+            ],
+        ]);
+    }
+
+    /**
+     * Get statistics by type
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function statisticsByType()
+    {
+        $typeData = KejadianBencana::join('jenis_bencanas', 'kejadian_bencanas.jenis_bencana_id', '=', 'jenis_bencanas.id')
+            ->selectRaw('jenis_bencanas.nama, COUNT(*) as jumlah')
+            ->groupBy('jenis_bencanas.id', 'jenis_bencanas.nama')
+            ->orderBy('jumlah', 'desc')
+            ->get();
+
+        $labels = $typeData->pluck('nama')->toArray();
+        $values = $typeData->pluck('jumlah')->toArray();
+
+        return response()->json([
+            'status' => 'success',
+            'data' => [
+                'labels' => $labels,
+                'values' => $values,
+            ],
+        ]);
+    }
+
+    /**
+     * Get statistics by kecamatan
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function statisticsByKecamatan()
+    {
+        $kecamatanData = KejadianBencana::selectRaw('kecamatan, COUNT(*) as jumlah')
+            ->groupBy('kecamatan')
+            ->orderBy('jumlah', 'desc')
+            ->limit(10)
+            ->get();
+
+        $labels = $kecamatanData->pluck('kecamatan')->toArray();
+        $values = $kecamatanData->pluck('jumlah')->toArray();
+
+        return response()->json([
+            'status' => 'success',
+            'data' => [
+                'labels' => $labels,
+                'values' => $values,
+            ],
         ]);
     }
 }

@@ -25,11 +25,15 @@ class AuthenticatedSessionController extends Controller
      */
     private function homeFor($user): string
     {
-        if ($user->hasRole('Super Admin')) return route('admin.dashboard');
+        // Cek role spesifik terlebih dahulu (bukan Super Admin)
         if ($user->hasRole('PK'))          return route('pk.dashboard');
         if ($user->hasRole('KL'))          return route('kl.dashboard');
         if ($user->hasRole('RR'))          return route('rr.dashboard');
-        // if ($user->hasRole('Staf BPBD'))   return route('admin.inventaris.index');
+        if ($user->hasRole('Staf BPBD'))   return route('admin.inventaris.index');
+        
+        // Super Admin sebagai fallback terakhir
+        if ($user->hasRole('Super Admin')) return route('admin.dashboard');
+        
         return route('dashboard'); // fallback jika belum punya role
     }
 

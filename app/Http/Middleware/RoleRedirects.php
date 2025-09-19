@@ -13,9 +13,7 @@ class RoleRedirects
             /** @var User $user */           // <-- tambahkan ini
             $user = Auth::user();            // sekarang linter tahu class-nya
 
-            if ($user->hasRole('Super Admin')) {
-                return redirect()->route('admin.users.index');
-            }
+            // Cek role spesifik terlebih dahulu (bukan Super Admin)
             if ($user->hasRole('PK')) {
                 return redirect()->route('pk.dashboard');
             }
@@ -24,6 +22,11 @@ class RoleRedirects
             }
             if ($user->hasRole('RR')) {
                 return redirect()->route('rr.dashboard');
+            }
+            
+            // Super Admin sebagai fallback terakhir
+            if ($user->hasRole('Super Admin')) {
+                return redirect()->route('admin.users.index');
             }
 
             return redirect()->intended('/dashboard');

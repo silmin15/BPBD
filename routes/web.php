@@ -51,10 +51,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
         if (!$u) return redirect()->route('login');
 
-        if ($u->hasRole('Super Admin')) return redirect()->route('admin.dashboard');
+        // Cek role spesifik terlebih dahulu (bukan Super Admin)
         if ($u->hasRole('PK'))          return redirect()->route('pk.dashboard');
         if ($u->hasRole('KL'))          return redirect()->route('kl.dashboard');
         if ($u->hasRole('RR'))          return redirect()->route('rr.dashboard');
+        
+        // Super Admin sebagai fallback terakhir
+        if ($u->hasRole('Super Admin')) return redirect()->route('admin.dashboard');
 
         return view('dashboard');
     })->name('dashboard');

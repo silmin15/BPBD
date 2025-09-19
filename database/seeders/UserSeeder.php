@@ -27,6 +27,39 @@ class UserSeeder extends Seeder
         );
         $superAdmin->syncRoles(['Super Admin']);
 
+        // User KL
+        $kl = User::updateOrCreate(
+            ['email' => 'kl@bpbd.go.id'],
+            [
+                'name' => 'Koordinator Logistik',
+                'password' => Hash::make('kl123'),
+                'email_verified_at' => now(),
+            ]
+        );
+        $kl->syncRoles(['KL']);
+
+        // User PK
+        $pk = User::updateOrCreate(
+            ['email' => 'pk@bpbd.go.id'],
+            [
+                'name' => 'Koordinator PK',
+                'password' => Hash::make('pk123'),
+                'email_verified_at' => now(),
+            ]
+        );
+        $pk->syncRoles(['PK']);
+
+        // User RR
+        $rr = User::updateOrCreate(
+            ['email' => 'rr@bpbd.go.id'],
+            [
+                'name' => 'Koordinator RR',
+                'password' => Hash::make('rr123'),
+                'email_verified_at' => now(),
+            ]
+        );
+        $rr->syncRoles(['RR']);
+
         // Contoh staf
         $staf = User::updateOrCreate(
             ['email' => 'staf@bpbd.go.id'],
