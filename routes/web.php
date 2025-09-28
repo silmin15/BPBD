@@ -17,39 +17,21 @@ use App\Http\Controllers\Role\Shared\ActivityReportController;
 // ===================== ROLE =====================
 use App\Http\Controllers\Role\KL\SkController         as KlSkController;
 use App\Http\Controllers\Role\PK\SkController         as PkSkController;
-
 use App\Http\Controllers\Role\RR\SkController         as RrSkController;
 use App\Http\Controllers\Role\Admin\DashboardController as AdminDashboard;
 use App\Http\Controllers\Role\Admin\RekapLogistikController as AdminRekap;
 use App\Http\Controllers\Role\Admin\SkController        as AdminSkController;
 
-<<<<<<< HEAD
-use App\Http\Controllers\Role\Admin\UserController      as AdminUserController;
-use App\Http\Controllers\Role\Admin\ReportController    as AdminReportController;
-
-// ===================== SHARED (lintas role) =====================
+use App\Http\Controllers\Role\Admin\UserController as AdminUserController;
+use App\Http\Controllers\Role\Admin\ReportController as AdminReportController;
+use App\Http\Controllers\Role\PK\BastController as PkBastController;
 use App\Http\Controllers\Role\KL\KejadianBencanaController as KlKejadianBencanaController;
 use App\Http\Controllers\Role\Admin\KejadianBencanaController as AdminKejadianBencanaController;
-=======
-// ===================== ROLE =====================
-use App\Http\Controllers\Role\PK\PKController;
-use App\Http\Controllers\Role\PK\SkController         as PkSkController;
-use App\Http\Controllers\Role\PK\BastController as PkBastController;
-
-use App\Http\Controllers\Role\KL\KLController;
-use App\Http\Controllers\Role\KL\LogistikController;
-use App\Http\Controllers\Role\KL\SkController         as KlSkController;
-
-use App\Http\Controllers\Role\RR\RRController;
-use App\Http\Controllers\Role\RR\SkController         as RrSkController;
-
-// ===================== SHARED (lintas role) =====================
-use App\Http\Controllers\Role\Shared\ActivityReportController;
 use App\Http\Controllers\Role\Shared\SopController as SopShared;
->>>>>>> 0a12d40432da0f426bf11fcf509d3cd03f166fb0
 
 use App\Http\Controllers\Public\HomeController as PublicHome;
 use App\Http\Controllers\Public\BastPublicController;
+
 /*
 |--------------------------------------------------------------------------
 | Publik
