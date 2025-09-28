@@ -1,12 +1,48 @@
 @use "../../core/variables" as v;
-#map {
-    height: calc(100vh - 260px); // sesuaikan tinggi header+footer
-    min-height: 420px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+/* Guard global: jangan pernah meluber ke kanan */
+html,
+body {
+    overflow-x: hidden;
+}
+* {
+    box-sizing: border-box;
 }
 
-.map-container {
-    background: #fff;
-    border-radius: 12px;
+/* Wrapper map: jangan boleh lebih lebar dari parent */
+.map-container,
+.map-wrapper,
+#map {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+/* Kalau ada class Tailwind 100vw bawaan, paksa jadi 100% */
+.w-screen,
+.min-w-screen,
+.max-w-screen,
+[class*="w-screen"] {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+
+/* Jika map di dalam grid bootstrap, nolkan gutter supaya tidak mentok kanan */
+.map-row {
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+}
+.map-row > [class^="col"] {
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+}
+
+/* Leaflet sizing aman */
+#map {
+    min-height: 420px;
+    height: calc(100vh - 260px);
+}
+.leaflet-container {
+    position: relative;
+    z-index: 0; /* jangan naik ke atas navbar */
+    width: 100%;
+    max-width: 100%;
 }

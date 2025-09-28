@@ -12,6 +12,7 @@ class AuthServiceProvider extends ServiceProvider
 {
     protected $policies = [
         LogistikItem::class => LogistikItemPolicy::class,
+        \App\Models\Sop::class => \App\Policies\SopPolicy::class,
     ];
 
     public function boot(): void

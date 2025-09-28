@@ -8,26 +8,31 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Spatie\Permission\Models\Role;
 
 abstract class BaseSkController extends Controller
 {
     /** nama prefix route, mis: 'kl', 'rr', 'pk', 'admin' */
     protected string $routeBase = 'kl';
-
-    /** scope data: 'own' = data milik user; 'all' = semua data */
     protected string $scope = 'own';
-
-    /** query dasar sesuai scope */
     protected function baseQuery(Request $req)
     {
         $q = SkDocument::query();
+
         if ($this->scope === 'own') {
             $q->where('created_by', $req->user()->id);
+        } else {
+            $q->with(['creator:id,name', 'creator.roles:id,name']);
+
+            // ✅ HANYA filter jika owner_role benar-benar diisi
+            if ($req->filled('owner_role')) {
+                $role = trim((string) $req->input('owner_role'));
+                $q->whereHas('creator.roles', fn($w) => $w->where('name', $role));
+            }
         }
+
         return $q;
     }
-
-    /** ======================= LIST + TAB ======================= */
     public function index(Request $req)
     {
         $activeTab = $req->query('tab', 'data');
@@ -35,7 +40,8 @@ abstract class BaseSkController extends Controller
         // DATA SK (list)
         $list = $this->baseQuery($req)
             ->latest('tanggal_sk')
-            ->paginate(15);
+            ->paginate(15)
+            ->withQueryString(); // penting agar owner_role/year/tab tetap ada
 
         // REKAP (default: tahun berjalan / ?year=YYYY)
         $year = (int) ($req->query('year') ?: now()->year);
@@ -45,7 +51,11 @@ abstract class BaseSkController extends Controller
             ->get();
         $byMonth = $rekapItems->groupBy(fn($it) => $it->tanggal_sk->format('Y-m'));
 
-        // view satuan untuk semua role, tinggal bawa $routeBase
+        // daftar role hanya untuk admin
+        $allRoles = $this->scope === 'all'
+            ? Role::whereIn('name', ['PK', 'KL', 'RR', 'Super Admin'])->pluck('name')->all()
+            : [];
+
         return view('role.shared.sk.index', [
             'activeTab' => $activeTab,
             'list'      => $list,
@@ -53,6 +63,7 @@ abstract class BaseSkController extends Controller
             'byMonth'   => $byMonth,
             'routeBase' => $this->routeBase,
             'scope'     => $this->scope,
+            'allRoles'  => $allRoles,   // untuk dropdown filter di Blade (khusus admin)
         ]);
     }
 
@@ -156,7 +167,7 @@ abstract class BaseSkController extends Controller
     public function rekapPdf(int $year, Request $req)
     {
         $selected = (array) $req->input('selected_ids', []);
-        if (count($selected) === 0) {
+        if (!$selected) {
             return redirect()->route("{$this->routeBase}.sk.index", ['tab' => 'rekap', 'year' => $year])
                 ->with('error', 'Pilih minimal satu SK untuk dicetak.');
         }
